@@ -61,13 +61,13 @@ const fetchProductos = () => {
     productosOriginales.value = [
         {
             name: busqueda.value,
-            price: '799.99 €',
+            price: '899.99 €',
             url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
             tienda: 'MediaMakt'
         },
         {
             name: busqueda.value,
-            price: '899.99 €',
+            price: '799.99 €',
             url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
             tienda: 'MediaMakt'
         },
