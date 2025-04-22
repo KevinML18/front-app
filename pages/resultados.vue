@@ -12,18 +12,20 @@
             <ProductCard
                 v-for="(item, index) in productosFiltrados || productosOriginales"
                 :key="index"
-                :name="item.name"
-                :price="item.price"
+                :name="item.titulo"
+                :price="item.precio"
                 :url="item.url"
-                :tienda="item.tienda"
+                :tienda="'Amazon'"
             />
         </div>
-        <HistoricPrice :historial="historial"/>
+        <HistoricPrice :historial="historial" />
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
+
 const router = useRoute()
 
 const busqueda = ref('')
@@ -31,23 +33,20 @@ const productosFiltrados = ref(null)
 const productosOriginales = ref([])
 const historial = ref([])
 
-// Se obtiene el nombre a partir de la ruta
-busqueda.value = router.query.producto
-
 // Método para aplicar filtros
-const actualizarFiltros = ({orderBy, tienda}) => {
-    // Esto es para que no mute
+const actualizarFiltros = ({ orderBy, tienda }) => {
     let filtrados = [...productosOriginales.value]
-    
+
     if (tienda && tienda !== 'todas') {
         filtrados = filtrados.filter(el => el.tienda === tienda)
     }
 
     if (orderBy === 'asc') {
-        filtrados.sort((a,b) => parseFloat(a.price) - parseFloat(b.price))
+        filtrados.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
     } else if (orderBy === 'desc') {
-        filtrados.sort((a,b) => parseFloat(b.price) - parseFloat(a.price))
+        filtrados.sort((a, b) => parseFloat(b.price) - parseFloat(a.price))
     }
+
     productosFiltrados.value = filtrados
 }
 
@@ -56,49 +55,19 @@ const quitarFiltros = () => {
     productosFiltrados.value = null
 }
 
-// AQUI IRIA LA PERICIÓN A LA API --- HACER ASINCRONA
-const fetchProductos = () => {
-    productosOriginales.value = [
-        {
-            name: busqueda.value,
-            price: '899.99 €',
-            url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
-            tienda: 'MediaMakt'
-        },
-        {
-            name: busqueda.value,
-            price: '799.99 €',
-            url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
-            tienda: 'MediaMakt'
-        },
-        {
-            name: busqueda.value,
-            price: '999.99 €',
-            url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
-            tienda: 'Amazon'
-        },
-        {
-            name: busqueda.value,
-            price: '1099.99 €',
-            url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
-            tienda: 'Amazon'
-        },
-        {
-            name: busqueda.value,
-            price: '1199.99 €',
-            url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
-            tienda: 'PcComponentes'
-        },
-        {
-            name: busqueda.value,
-            price: '1123.99 €',
-            url: 'https://www.mediamarkt.es/es/product/_portatil-hp-15-fd0112ns-156-full-hd-intelr-coretm-i5-1235u-16gb-ram-512gb-ssd-graficos-irisr-xe-windows-11-h-plata-1577458.html',
-            tienda: 'Quito Store'
-        }
-    ]
+// Fetch para productos desde la API
+const fetchProductos = async (producto) => {
+    try {
+        const response = await fetch(`http://localhost:8000/get_productos/${encodeURIComponent(producto)}`);
+        if (!response.ok) throw new Error("Error en la solicitud");
+        return await response.json();
+    } catch (error) {
+        console.error("Error al obtener productos:", error);
+        return [];
+    }
 }
 
-// Fetch para el historial
+// Datos de ejemplo para historial
 const fetchHistorial = () => {
     historial.value = [
         { time: '2025-04-13', value: 258 },
@@ -110,19 +79,20 @@ const fetchHistorial = () => {
         { time: '2025-10-23', value: 23 }
     ]
 }
-// Se ejecuta al inicial la vista
-onMounted(() => {
-    fetchProductos()
-    fetchHistorial()
+
+// Ejecuta cuando el componente monta
+onMounted(async () => {
+    busqueda.value = router.query.producto || '';
+    productosOriginales.value = await fetchProductos(busqueda.value);
+    console.log(productosOriginales.value)
+    fetchHistorial();
 })
 
-// Observa cambios en la búsqueda 
-watchEffect(() => {
-    busqueda.value = router.query.producto
-    fetchProductos()
-})
+// Observa cambios en la búsqueda
+watchEffect(async () => {
+    if (router.query.producto) {
+        busqueda.value = router.query.producto;
+        productosOriginales.value = await fetchProductos(busqueda.value);
+    }
+});
 </script>
-
-<style scoped>
-
-</style>
