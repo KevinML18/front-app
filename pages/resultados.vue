@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="loading"
-        class="flex flex-col absolute inset-0 bg-slate-950/10 flex items-center justify-center z-10"
+        class="absolute inset-0 bg-slate-950/10 flex flex-col items-center justify-center z-10"
         >
         <DotLottieVue
             src="/animations/loading.lottie"
