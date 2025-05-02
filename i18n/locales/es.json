@@ -7,6 +7,7 @@
     "email": "Correo electrónico",
     "password": "Contraseña",
     "login_redirect": "¿Ya tienes una cuenta? Inicia sesión aquí",
+    "loading": "Cargando...",
     "register_redirect": "¿Aún no tienes una cuenta? Regístrate aquí",
     "remember_me": "Recuérdame",
     "results_for": "Resultados para",
