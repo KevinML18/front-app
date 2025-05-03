@@ -11,7 +11,8 @@ export default defineNuxtConfig({
         '@nuxtjs/i18n',
     ],
     css: [
-        '~/assets/css/main.css'
+        '~/assets/css/main.css',
+        'element-plus/dist/index.css'
     ],
     vite: {
         plugins: [
