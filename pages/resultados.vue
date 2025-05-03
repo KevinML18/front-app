@@ -94,7 +94,7 @@ const fetchProductos = async (producto) => {
     loading.value = true
     setTimeout(() => {
         loading.value = false
-    }, 1000)
+    }, 5000)
     return [
         {
             "titulo": "Apple iPhone 16 de 256 GB: Smartphone 5G con Control de Cámara, Chip A18 y un subidón en autonomía. Compatible con los AirPods; Azul Ultramar",
