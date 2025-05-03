@@ -115,7 +115,6 @@ export default defineComponent({
         this.maxPrice = Math.max(...this.productos.map(p => parseFloat(p.precio)))
         this.rango[0] = this.minPrice
         this.rango[1] = this.maxPrice
-        console.log(this.rango)
     },
     // Observa cambios y los emite
     watch: {
