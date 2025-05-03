@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center bg-gray-900 rounded-xl p-5 shadow-sm space-x-4">
-        <img src="https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_144186204/fee_786_587_png" alt="Producto" class="w-30 h-auto" />
+        <img :src="image" alt="Producto" class="w-30 h-auto" />
         <div class="flex-1">
             <a :href="url" class="text-xl font-semibold text-emerald-400 hover:underline" target="_blank">
                 {{ name }}
@@ -28,6 +28,9 @@ export default defineComponent({
             type: String
         },
         shop: {
+            type: String
+        },
+        image: {
             type: String
         }
     }
