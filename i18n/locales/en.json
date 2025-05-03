@@ -3,6 +3,8 @@
   "register": "Register",
   "login": "Log in",
   "search": "Search",
+  "name": "Name",
+  "last_name": "Last name",
   "username": "Username",
   "email": "Email",
   "password": "Password",

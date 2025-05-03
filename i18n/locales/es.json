@@ -3,6 +3,8 @@
     "register": "Registrarse",
     "login": "Iniciar sesión",
     "search": "Buscar",
+    "name": "Nombre",
+    "last_name": "Apellidos",
     "username": "Nombre de usuario",
     "email": "Correo electrónico",
     "password": "Contraseña",

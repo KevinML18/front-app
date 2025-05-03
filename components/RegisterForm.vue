@@ -4,6 +4,18 @@
         @click.self="$emit('show-auth-form', 'close')"
     >
         <div class="bg-slate-900 flex flex-col p-10 rounded-xl gap-3 w-full max-w-sm">
+            <label>{{ $t('name') }}</label>
+            <input
+                type="email"
+                v-model="name"
+                class="bg-slate-800 rounded-md p-1"
+            >
+            <label>{{ $t('last_name') }}</label>
+            <input
+                type="email"
+                v-model="lastname"
+                class="bg-slate-800 rounded-md p-1"
+            >
             <label>{{ $t('username') }}</label>
             <input
                 type="email"
@@ -35,6 +47,8 @@
 </template>
 
 <script setup>
+const name = ref('')
+const lastname = ref('')
 const username = ref('')
 const email = ref('')
 const password = ref('')
