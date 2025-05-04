@@ -15,16 +15,16 @@
     </div>
 
     <div v-else>
-        <div class="flex min-h-screen">
+        <div class="flex flex-col md:flex-row min-h-screen">
             <!-- Filtros -->
-            <div class="w-1/7 p-4 flex flex-col">
+            <div class="w-full md:w-1/7 p-4 flex flex-col">
                 <ProductFilters
                     :productos="productosOriginales"
                     @actualizar-filtros="actualizarFiltros"
                     @quitar-filtros="quitarFiltros"
                 />
             </div>
-            <div class="w-6/7 p-4 flex flex-col gap-5">
+            <div class="w-full md:w-6/7 p-4 flex flex-col gap-5">
                 <h1 class="text-2xl font-bold mb-2">
                     {{ $t('results_for') }}: "{{ busqueda }}"
                 </h1>
@@ -36,6 +36,7 @@
                     :url="item.url"
                     :shop="item.tienda"
                     :image="item.imagen_url"
+                    class="product"
                 />
             </div>
         </div>
@@ -59,7 +60,7 @@ const actualizarFiltros = ({ orderBy, tienda, rango }) => {
     let filtrados = [...productosOriginales.value]
 
     if (rango) {
-        filtrados = filtrados.filter(el => el.precio >= Math.round(rango[0]) && el.precio <= Math.round(rango[1]))
+        filtrados = filtrados.filter(el => el.precio >= Math.floor(rango[0]) && el.precio <= Math.ceil(rango[1]))
     }
 
     if (tienda && tienda !== 'todas') {
@@ -76,11 +77,10 @@ const actualizarFiltros = ({ orderBy, tienda, rango }) => {
             filtrados = filtrados.filter(el => el.tienda === tienda)
         }
         if (rango) {
-            filtrados = filtrados.filter(el => el.precio >= Math.round(rango[0]) && el.precio <= Math.round(rango[1]))
+            filtrados = filtrados.filter(el => el.precio >= Math.floor(rango[0]) && el.precio <= Math.ceil(rango[1]))
         }
     }
     
-
     productosFiltrados.value = filtrados
 }
 
@@ -184,3 +184,23 @@ watchEffect(async () => {
     }
 });
 </script>
+
+<style scoped>
+@keyframes show {
+    from {
+        opacity: 0; scale: 10%
+    }
+
+    to {
+        opacity: 1; scale: 100%
+    }
+}
+
+.product {
+    view-timeline-name: --reveal;
+    animation-name: show;
+    animation-fill-mode: both;
+    animation-timeline: --reveal;
+    animation-range: entry 10% cover 15%;
+}
+</style>

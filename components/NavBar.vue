@@ -12,10 +12,12 @@
             <!-- Buscador -->
             <div>
                 <input
+                    ref="inputBusqueda"
                     type="text"
                     v-model="producto"
                     class="bg-gray-900 p-2 rounded-xl"
                     :placeholder="$t('search_message')"
+                    @keyup.enter="buscar"
                 />
                 <button
                     @click="buscar"
@@ -26,23 +28,21 @@
             </div>
     
             <!-- Selector de idioma -->
-            <div class="flex items-center gap-3 px-3 py-2 rounded-lg w-fit">
-            <img :src="getFlag(idiomaActual)" :alt="idiomaActual" class="w-8 h-auto" />
-            <select @change="changeLanguage" class="text-sm p-1 rounded-md cursor-pointer" v-model="idiomaActual">
-                <option
-                v-for="locale in locales"
-                :value="locale.code"
-                class="text-black"
-                >
-                {{ locale.code.toUpperCase() }}
-                </option>
-            </select>
+            <div class=" items-center gap-3 px-3 py-2 rounded-lg w-fit md:flex">
+                <img :src="getFlag(idiomaActual)" :alt="idiomaActual" class="w-8 hidden md:block h-auto" />
+                <select @change="changeLanguage" class="text-sm p-1 hidden md:block rounded-md cursor-pointer" v-model="idiomaActual">
+                    <option
+                    v-for="locale in locales"
+                    :value="locale.code"
+                    class="text-black"
+                    >
+                    {{ locale.code.toUpperCase() }}
+                    </option>
+                </select>
+                <button @click="$emit('show-auth-form', 'register')" class="cursor-pointer hover:text-slate-300 active:text-slate-400">
+                    {{ $t('register') }} / {{ $t('login') }}
+                </button>
             </div>
-    
-            <!-- Botón login/register -->
-            <button @click="$emit('show-auth-form', 'register')" class="cursor-pointer hover:text-slate-300 active:text-slate-400">
-            {{ $t('register') }} / {{ $t('login') }}
-            </button>
         </div>
     </div>
 </template>
@@ -56,6 +56,7 @@ const router = useRouter()
 
 const producto = ref('')
 const idiomaActual = ref(locale.value)
+const inputBusqueda = ref(null)
 
 const navbarStyle = ref({ opacity: 1 })
 const lastScroll = ref(0)
@@ -73,8 +74,10 @@ const handleScroll = () => {
     lastScroll.value = scrollTop
 }
 
-const buscar = () => {
+const buscar = (event) => {
+    event.preventDefault()
     router.push(`/resultados?producto=${encodeURIComponent(producto.value)}`)
+    inputBusqueda.value?.blur()
 }
 
 const getFlag = (code) => {

@@ -1,15 +1,14 @@
 <template>
-    <h2 class="text-2xl font-bold mb-2">{{ $t('filters') }}:</h2>
-    <div class="flex flex-col gap-10">
+    <h2 class="text-2xl font-bold mb-2 hidden md:block">{{ $t('filters') }}:</h2>
+    <div class="flex flex-wrap mt-5 justify-around md:flex-col gap-4 md:gap-10 w-full">
         <!-- Filtro tienda -->
         <div class="shop">
             <label class="block font-bold mb-3">{{ $t('shop') }}:</label>
-            <select v-model="tiendaFilter">
-                <option class="text-black" value="todas">{{ $t('all_shops') }}</option>
+            <select v-model="tiendaFilter" class="cursor-pointer bg-slate-900 p-1 rounded-md w-full">
+                <option value="todas">{{ $t('all_shops') }}</option>
                 <option v-for="(tienda, index) in tiendas"
                     :key="index"
                     :value="tienda"
-                    class="text-black"
                 >
                     {{ tienda }}
                 </option>
@@ -19,14 +18,14 @@
         <!-- Filtro orden -->
         <div class="orderBy">
             <label class="block font-bold mb-3">{{ $t('sort_by') }}:</label>
-            <select v-model="orderBy">
-                <option value="default" class="text-black">
+            <select v-model="orderBy" class="cursor-pointer bg-slate-900 p-1 rounded-md w-full">
+                <option value="default">
                     {{ $t('default') }}
                 </option>
-                <option value="asc" class="text-black">
+                <option value="asc">
                     {{ $t('price_asc') }}
                 </option>
-                <option value="desc" class="text-black">
+                <option value="desc">
                     {{ $t('price_desc') }}
                 </option>
             </select>
@@ -43,7 +42,7 @@
                 :step="0.1"
                 :format-tooltip="val => Math.round(val)"
             />
-            <div class="flex items-center gap-4 mb-4">
+            <div class="items-center gap-4 mb-4 hidden sm:flex">
                 <!-- Input mínimo -->
                 <input
                     type="number"
@@ -64,15 +63,14 @@
                 />
             </div>
         </div>
-
-        <!-- Borrar -->
-        <button
-            @click="borrarFiltros"
-            class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2"
-        >
-            {{ $t('clear_filters') }}
-        </button>
     </div>
+    <!-- Borrar -->
+    <button
+        @click="borrarFiltros"
+        class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-5"
+    >
+        {{ $t('clear_filters') }}
+    </button>
 </template>
 
 <script>
@@ -139,6 +137,7 @@ export default defineComponent({
         borrarFiltros() {
             this.orderBy = 'default'
             this.tiendaFilter = 'todas'
+            this.rango = [this.minPrice, this.maxPrice]
             this.$emit('quitar-filtros')
         }
     }

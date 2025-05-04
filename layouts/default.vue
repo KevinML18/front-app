@@ -3,7 +3,7 @@
         <NavBar @show-auth-form="showAuthForm"/>
         <RegisterForm v-if="registerForm" @show-auth-form="showAuthForm"/>
         <LoginForm v-if="loginForm" @show-auth-form="showAuthForm"/>
-        <main class="pt-30">
+        <main class="md:pt-27 pt-23">
             <slot />
         </main>
     </div>
