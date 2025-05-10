@@ -91,6 +91,18 @@ const quitarFiltros = () => {
 
 // Fetch para productos desde la API
 const fetchProductos = async (producto) => {
+
+    // try {
+    //     const response = await fetch(`http://127.0.0.1:8000/get_producto_amazon/${encodeURIComponent(producto)}`);
+    //     if (!response.ok) throw new Error(`Error HTTP: ${response.status}`)
+
+    //     const data = await response.json()
+    //     console.log("Datos recibidos:", data)
+    //     return data
+    // } catch (error) {
+    //     console.error("Error al obtener los datos:", error)
+    // }
+
     loading.value = true
     setTimeout(() => {
         loading.value = false
