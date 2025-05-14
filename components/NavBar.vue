@@ -6,26 +6,27 @@
         <div class="flex flex-row justify-between p-5">
             <!-- Contenido actual del NavBar -->
             <nuxt-link to="/">
-            <img src="/logo.png" class="w-13 h-auto" />
+            <img src="/logo.png" class="w-10 h-auto" />
             </nuxt-link>
     
             <!-- Buscador -->
-            <div>
+            <div class="flex items-center gap-2">
                 <input
                     ref="inputBusqueda"
                     type="text"
                     v-model="producto"
-                    class="bg-gray-900 p-2 rounded-xl"
+                    class="bg-gray-900 p-2 rounded-xl text-white"
                     :placeholder="$t('search_message')"
                     @keyup.enter="buscar"
                 />
                 <button
                     @click="buscar"
-                    class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 p-2 rounded-xl cursor-pointer ml-2"
+                    class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer"
                 >
-                    {{ $t('search') }}
+                    <Search class="w-5 h-5 text-white" />
                 </button>
             </div>
+
     
             <!-- Selector de idioma -->
             <div class=" items-center gap-3 px-3 py-2 rounded-lg w-fit md:flex">
@@ -50,6 +51,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
+import { Search } from 'lucide-vue-next';
 
 const { locales, setLocale, locale } = useI18n()
 const router = useRouter()
@@ -75,6 +77,7 @@ const handleScroll = () => {
 }
 
 const buscar = (event) => {
+    if(producto.value.trim() === '') return
     event.preventDefault()
     router.push(`/resultados?producto=${encodeURIComponent(producto.value)}`)
     inputBusqueda.value?.blur()
