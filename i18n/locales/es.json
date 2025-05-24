@@ -49,5 +49,12 @@
     "hours_ago": "{count} hora atrás | {count} horas atrás",
     "days_ago": "{count} día atrás | {count} días atrás",
     "month_ago": "{count} mes atrás | {count} meses atrás",
-    "more_than_a_year": "hace más de un año"
+    "more_than_a_year": "hace más de un año",
+    "name_is_required": "El nombre es obligatorio",
+    "lastname_is_required": "El apellido  es obligatorio",
+    "username_is_required": "El nombre de usurio es obligatorio",
+    "email_is_required": "El correo es obligatorio",
+    "password_is_required": "La contraseña es obligatoria",
+    "invalid_email": "Correo no válido",
+    "welcome": "Bienvenido"
 }

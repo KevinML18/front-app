@@ -49,5 +49,12 @@
   "hours_ago": "hours ago",
   "days_ago": "days ago",
   "month_ago": "months ago",
-  "more_than_a_year": "years ago"
+  "more_than_a_year": "years ago",
+  "name_is_required": "Name is required",
+  "lastname_is_required": "Lastname is required",
+  "username_is_required": "Username is required",
+  "email_is_required": "Email is required",
+  "password_is_required": "Password is required",
+  "invalid_email": "Invalid email",
+  "welcome": "Welcome"
 }
