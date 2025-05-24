@@ -1,1 +1,102 @@
 @import "tailwindcss";
+
+/* Aplica a el contenedor principal que tiene clase input-custom */
+.input-custom {
+  background-color: #1e293b !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Aplica al input real dentro del componente */
+.input-custom > .el-input__inner {
+  background-color: #1e293b !important; /* slate-800 */
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 0.5rem !important;
+  border: none !important;
+  width: 90% !important;
+  box-shadow: none !important;
+}
+
+.custom-form > .el-form-item__inner {
+  color: white;
+}
+/* Focus */
+.input-custom > .el-input__inner:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px #059669 !important; /* emerald-500 */
+}
+
+.input-custom > .el-input__inner:active {
+  outline: none !important;
+  box-shadow: 0 0 0 2px #059669 !important; /* emerald-500 */
+}
+
+/* Fuerza el color blanco en los labels */
+.el-form-item__label {
+  color: white !important;
+}
+
+.custom-form .el-form-item span {
+  color: white !important;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  display: flex;
+}
+
+.custom-form .el-form-item span:hover {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+
+.custom-form .el-form-item span:active {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+
+
+.btn-custom {
+  background-color: #10b981 !important; /* emerald-500 */
+  color: white !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: background-color 0.2s ease !important;
+  user-select: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 600 !important;
+}
+
+.btn-custom:hover {
+  background-color: #059669 !important; /* emerald-600 */
+}
+
+.btn-custom:active {
+  background-color: #047857 !important; /* emerald-700 */
+  outline: none !important;
+}
+
+.btn-custom:focus-visible {
+  outline: 2px solid #059669 !important;
+  outline-offset: 2px !important;
+}
+
+.my-dialog {
+  background-color: #0f172a !important;
+  max-width: 450px;
+  width: 100%;
+  padding: 2.5rem;
+  border-radius: 0.75rem;
+  color: white;
+  box-sizing: border-box;
+}
+
+/* Centrar el wrapper del dialog */
+.el-dialog__wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+

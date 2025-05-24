@@ -40,7 +40,7 @@
                     {{ locale.code.toUpperCase() }}
                     </option>
                 </select>
-                <button @click="$emit('show-auth-form', 'register')" class="cursor-pointer hover:text-slate-300 active:text-slate-400">
+                <button @click="$emit('show-auth-form')" class="cursor-pointer hover:text-slate-300 active:text-slate-400">
                     {{ $t('register') }} / {{ $t('login') }}
                 </button>
             </div>
