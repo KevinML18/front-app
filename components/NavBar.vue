@@ -23,7 +23,7 @@
                     @click="buscar"
                     class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer"
                 >
-                    <Search class="w-5 h-5 text-white" />
+                    <Search class="w-4 h-4 text-white" />
                 </button>
             </div>
 
