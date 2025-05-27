@@ -122,6 +122,7 @@ const login = async () => {
   if ("error" in data) {
     $showError(data.msg)
   } else {
+    localStorage.setItem('id_user', data.id)
     emit('show-auth-form', 'close')
     await router.push('/')
     $showSuccess(`${t('welcome')} ${data.data.nombre_usuario}`)
