@@ -159,7 +159,7 @@ const submit = async (formEl) => {
 
 
 const register = async () => {
-  const url = `http://127.0.0.1:8000/crear_usuario/?nombre_usuario=${encodeURIComponent(form.username)}&nombre=${encodeURIComponent(form.name)}&apellidos=${encodeURIComponent(form.lastname)}&email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}&foto=null`
+  const url = `${getApiUrl()}/crear_usuario/?nombre_usuario=${encodeURIComponent(form.username)}&nombre=${encodeURIComponent(form.name)}&apellidos=${encodeURIComponent(form.lastname)}&email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}&foto=null`
 
   const response = await fetch(url, {
     method: 'POST'

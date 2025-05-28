@@ -111,18 +111,19 @@ const submit = async (formEl) => {
 }
 
 const login = async () => {
-  const url = `http://127.0.0.1:8000/loguear_ususario/?email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}`
+  const url = `${getApiUrl()}/loguear_ususario/?email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}`
 
   const response = await fetch(url, {
     method: 'GET'
   })
 
   const data = await response.json()
-
+  console.log(data)
   if ("error" in data) {
     $showError(data.msg)
   } else {
-    localStorage.setItem('id_user', data.id)
+    console.log('EXISTE')
+    localStorage.setItem('id_user', data.data.ide)
     emit('show-auth-form', 'close')
     await router.push('/')
     $showSuccess(`${t('welcome')} ${data.data.nombre_usuario}`)

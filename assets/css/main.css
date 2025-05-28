@@ -100,3 +100,57 @@
   justify-content: center !important;
 }
 
+/* Aplica a toda la capa del popper (dropdown completo) */
+.el-dropdown__popper,
+.el-popper {
+  background-color: #1f2937 !important; /* bg-gray-900 */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.el-popper::before {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Estilos específicos si usas popper-class */
+.dropdown-custom.el-popper {
+  background-color: #1f2937 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Asegura que el dropdown no tenga sombras adicionales */
+.el-dropdown-menu {
+  background-color: #1f2937 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0.5rem !important;
+  padding: 0.25rem 0 !important;
+}
+
+/* Estilos de los items */
+.el-dropdown-menu__item {
+  color: white !important;
+  background-color: transparent !important;
+}
+
+.el-dropdown-menu__item:hover {
+  background-color: #111827 !important; /* bg-gray-800 */
+  color: #10b981 !important; /* emerald-500 */
+}
+
+/* Aplica a todo el popper (incluye menú y flecha) */
+.dropdown-custom {
+  background-color: #1f2937 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Estiliza la flecha del popper (el pico) */
+.dropdown-custom .el-popper__arrow::before {
+  background-color: #1f2937 !important;
+  border: none !important;
+  box-shadow: none !important;
+}

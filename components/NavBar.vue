@@ -15,7 +15,7 @@
                     ref="inputBusqueda"
                     type="text"
                     v-model="producto"
-                    class="bg-gray-900 p-2 rounded-xl text-white"
+                    class="bg-gray-900 p-2 rounded-xl text-white md:w-150 "
                     :placeholder="$t('search_message')"
                     @keyup.enter="buscar"
                 />
@@ -28,19 +28,65 @@
             </div>
 
     
-            <!-- Selector de idioma -->
-            <div class=" items-center gap-3 px-3 py-2 rounded-lg w-fit md:flex">
-                <img :src="getFlag(idiomaActual)" :alt="idiomaActual" class="w-8 hidden md:block h-auto" />
-                <select @change="changeLanguage" class="text-sm p-1 hidden md:block rounded-md cursor-pointer" v-model="idiomaActual">
-                    <option
-                    v-for="locale in locales"
-                    :value="locale.code"
-                    class="text-black"
+            <!-- Usuario -->
+            <div class="flex gap-5 md:mr-13">
+                <div>
+                    <el-dropdown 
+                        trigger="click" 
+                        @command="changeLanguage"
+                        popper-class="dropdown-custom"
                     >
-                    {{ locale.code.toUpperCase() }}
-                    </option>
-                </select>
-                <button @click="$emit('show-auth-form')" class="cursor-pointer hover:text-slate-300 active:text-slate-400">
+                        <div class="flex items-center cursor-pointer">
+                            <img
+                                :src="getFlag(idiomaActual)"
+                                :alt="idiomaActual"
+                                class="w-9 h-auto hidden md:block"
+                            />
+
+                        </div>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                v-for="locale in locales"
+                                :key="locale.code"
+                                :command="locale.code"
+                                >
+                                {{ locale.code.toUpperCase() }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+                <div class="cursor-pointer flex flex-wrap items-center">
+                    <el-dropdown trigger="click" popper-class="dropdown-custom">
+                        <img
+                            v-if="user && user.foto"
+                            class="w-10"
+                            :src="user.foto"
+                            alt="profile picture"
+                        >
+                        <img
+                            v-else
+                            class="w-10 bg-cyan-50 rounded-full"
+                            src="/default_pic.png"
+                            alt="default picture"
+                        >
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <nuxt-link to="profile">
+                                    <el-dropdown-item>
+                                        {{ $t('profile') }}
+                                    </el-dropdown-item>
+                                </nuxt-link>
+                                <el-dropdown-item @click="logout">{{ $t('logout') }}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+                <button
+                    v-if="!user"
+                    @click="$emit('show-auth-form')"
+                    class="cursor-pointer hover:text-slate-300 active:text-slate-400">
                     {{ $t('register') }} / {{ $t('login') }}
                 </button>
             </div>
@@ -51,7 +97,8 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import { Search } from 'lucide-vue-next';
+import { LogOut, Search } from 'lucide-vue-next';
+import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
 
 const { locales, setLocale, locale } = useI18n()
 const router = useRouter()
@@ -59,6 +106,7 @@ const router = useRouter()
 const producto = ref('')
 const idiomaActual = ref(locale.value)
 const inputBusqueda = ref(null)
+const user = ref(null)
 
 const navbarStyle = ref({ opacity: 1 })
 const lastScroll = ref(0)
@@ -89,12 +137,14 @@ const getFlag = (code) => {
         : '/flags/united kingdom.svg'
 }
 
-const changeLanguage = (event) => {
-    idiomaActual.value = event.target.value
-    setLocale(idiomaActual.value)
+const changeLanguage = (code) => {
+  idiomaActual.value = code
+  setLocale(code)
 }
 
-onMounted(() => {
+
+onMounted(async () => {
+    user.value = await getAuthUser()
     lastScroll.value = window.scrollY
     window.addEventListener('scroll', handleScroll)
 })
@@ -102,6 +152,11 @@ onMounted(() => {
 onBeforeUnmount(() => {
     window.removeEventListener('scroll', handleScroll)
 })
+
+const logout = () => {
+    localStorage.removeItem('id_user')
+    user.value = null
+}
 </script>
 
 

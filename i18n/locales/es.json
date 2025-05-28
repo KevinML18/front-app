@@ -26,7 +26,7 @@
     "all_shops": "Todas",
     "default": "Por defecto",
     "profile": "Perfil",
-    "my_alerts": "Mis alertas",
+    "my_alerts": "Mis favoritos",
     "preferences": "Preferencias",
     "change": "Cambiar",
     "delete": "Eliminar",
@@ -56,5 +56,9 @@
     "email_is_required": "El correo es obligatorio",
     "password_is_required": "La contraseña es obligatoria",
     "invalid_email": "Correo no válido",
-    "welcome": "Bienvenido"
+    "welcome": "Bienvenido",
+    "logout": "Cerrar sesión",
+    "product_added_to_favourites": "Producto añadido a favoritos",
+    "delete_favourite": "Borrar favorito",
+    "product_deleted_from_favourites": "Favorito borrado"
 }

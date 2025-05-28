@@ -26,7 +26,7 @@
   "all_shops": "All",
   "default": "Default",
   "profile": "Profile",
-  "my_alerts": "My alerts",
+  "my_alerts": "My favourites",
   "preferences": "Preferences",
   "change": "Change",
   "delete": "Delete",
@@ -56,5 +56,9 @@
   "email_is_required": "Email is required",
   "password_is_required": "Password is required",
   "invalid_email": "Invalid email",
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "logout": "Logout",
+  "product_added_to_favourites": "Product added to favourites",
+  "delete_favourite": "Delete favourite",
+  "product_deleted_from_favourites": "Favourite deleted"
 }

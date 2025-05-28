@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col md:w-60 md:h-[350px] h-[320px] w-39 bg-gray-900 md:p-4 p-2 rounded-lg">
-    <div class="w-full md:h-40 md:p-3 f-20 flex items-center justify-center rounded-sm">
+    <div class="w-full h-32 md:h-40 p-3 flex items-center justify-center rounded-sm overflow-hidden">
       <img
         :src="product.imagen_url"
         :alt="product.titulo"
-        class="max-w-full max-h-full object-contain rounded-sm"
+        class="w-full h-full object-contain rounded-sm"
       />
     </div>
     <div class="flex flex-col mt-3 flex-grow overflow-hidden">
@@ -22,9 +22,6 @@
     </button>
   </div>
 </template>
-
-
-
 
 <script>
 import { defineComponent } from 'vue';

@@ -14,19 +14,41 @@
     </div>
     <div class="flex flex-col gap-3">
       <button
+        v-if="favourite"
+        class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium px-4 py-2 rounded-lg cursor-pointer"
+        @click="deleteFavourite"
+      >
+        <DotLottieVue
+          v-if="loading"
+          src="animations/loading2.lottie"
+          autoplay
+          loop
+          class="w-27 h-6"
+        />
+        <span v-else>{{ $t('delete_favourite') }}</span>
+      </button>
+      <button
+        v-else
         class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg cursor-pointer"
         @click="addFavourite"
       >
-        {{ $t('set_alert') }}
-      </button>
-      <button class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium px-4 py-2 rounded-lg cursor-pointer">
-        {{ $t('delete') }}
+        <DotLottieVue
+          v-if="loading"
+          src="animations/loading2.lottie"
+          autoplay
+          loop
+          class="w-27 h-6"
+        />
+        <span v-else>{{ $t('set_alert') }}</span>
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
+
+const { t } = useI18n()
 const props = defineProps({
     name: {
         type: String
@@ -45,19 +67,42 @@ const props = defineProps({
     }
 })
 
-const addFavourite = async () => {
-    const urlF = `http://127.0.0.1:8000/crearfavorito/?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent('23')}&tienda=${encodeURIComponent(props.shop)}`
+const favourite = ref(false)
+const loading = ref(false)
 
-    const response = await fetch(urlF, { method: 'POST' })
+const addFavourite = async () => {
+  loading.value = true
+  const ide = localStorage.getItem('id_user')
+  const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent(ide)}&tienda=${encodeURIComponent(props.shop)}`
+
+  const response = await fetch(urlF, { method: 'POST' })
 
   const data = await response.json()
 
   if ("error" in data) {
     $showError(data.msg)
   } else {
-    console.log(data)
+    favourite.value = true
+    $showSuccess(t('product_added_to_favourites'))
   }
+  loading.value = false
+}
 
+const deleteFavourite = async () => {
+  loading.value = true
+  const ide = localStorage.getItem('id_user')
+  const urlF = `${getApiUrl()}/eliminar_favorito/?ide=${encodeURIComponent(ide)}&titulo=${encodeURIComponent(props.name)}`
+
+  const response = await fetch(urlF, { method: 'POST' })
+  const data = await response.json()
+
+  if ("error" in data) {
+    $showError(data.msg)
+  } else {
+    favourite.value = false
+    $showSuccess(t('product_deleted_from_favourites'))
+  }
+  loading.value = false
 }
 </script>
 

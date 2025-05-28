@@ -1,11 +1,23 @@
 export default async function getAutUser() {
-    const baseUrl = 'http://127.0.0.1/'
-    localStorage.getItem('id_user')
-    const response = await fetch(baseUrl, { method: 'POST' })
-    if ("error" in response) {
-        $showError(t('unknown_user'))
-        return
+    const ide = localStorage.getItem('id_user')
+    if (ide) {
+        try {
+            const response = await fetch(`${getApiUrl()}/mostrar_usuario/?id=${ide}`, {
+                method: 'GET'
+            })
+
+            if (!response.ok) {
+                $showError(t('unknown_user'))
+                return
+            }
+
+            const user = await response.json()
+            return user.data
+        } catch (error) {
+            $showError(t('unknown_user'))
+            return
+        }
     } else {
-        return response
+        return false
     }
 }
