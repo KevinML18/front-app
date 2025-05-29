@@ -1,0 +1,1 @@
+export const getAuthUser = (value = null) => useState('auth_user', () => value)

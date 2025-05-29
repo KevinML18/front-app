@@ -41,7 +41,10 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email, } from '@vuelidate/validators'
 import { $showError } from '@/utils/notifications'
 import { useRouter } from 'vue-router'
+import { useAuth } from '~/composables/auth/useAuth'
 
+
+const { login } = useAuth()
 const { t } = useI18n()
 const router = useRouter()
 const invalidEmail = ref(false)
@@ -95,7 +98,7 @@ const submit = async (formEl) => {
     }
   })
   if (!v$.value.$invalid) {
-    login()
+    loginUser()
   } else {
     for (const key in v$.value) {
       if (v$.value[key]?.$invalid) {
@@ -110,23 +113,19 @@ const submit = async (formEl) => {
   }
 }
 
-const login = async () => {
+const loginUser = async () => {
   const url = `${getApiUrl()}/loguear_ususario/?email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}`
 
-  const response = await fetch(url, {
-    method: 'GET'
-  })
-
+  const response = await fetch(url, { method: 'GET' })
   const data = await response.json()
-  console.log(data)
+
   if ("error" in data) {
     $showError(data.msg)
   } else {
-    console.log('EXISTE')
-    localStorage.setItem('id_user', data.data.ide)
+    login(data.data)
+    $showSuccess(`${t('welcome')} ${data.data.nombre_usuario}`)
     emit('show-auth-form', 'close')
     await router.push('/')
-    $showSuccess(`${t('welcome')} ${data.data.nombre_usuario}`)
   }
 }
 

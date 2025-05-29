@@ -57,7 +57,7 @@
                         </template>
                     </el-dropdown>
                 </div>
-                <div class="cursor-pointer flex flex-wrap items-center">
+                <div class="cursor-pointer flex flex-wrap items-center" v-if="authUser">
                     <el-dropdown trigger="click" popper-class="dropdown-custom">
                         <img
                             v-if="user && user.foto"
@@ -78,17 +78,19 @@
                                         {{ $t('profile') }}
                                     </el-dropdown-item>
                                 </nuxt-link>
-                                <el-dropdown-item @click="logout">{{ $t('logout') }}</el-dropdown-item>
+                                <el-dropdown-item @click="logoutUser">{{ $t('logout') }}</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
                 </div>
-                <button
-                    v-if="!user"
-                    @click="$emit('show-auth-form')"
-                    class="cursor-pointer hover:text-slate-300 active:text-slate-400">
-                    {{ $t('register') }} / {{ $t('login') }}
-                </button>
+                <div v-else>
+                    <button
+                        @click="$emit('show-auth-form')"
+                        class="cursor-pointer hover:text-slate-300 active:text-slate-400"
+                    >
+                        {{ $t('register') }} / {{ $t('login') }}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -99,14 +101,17 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { LogOut, Search } from 'lucide-vue-next';
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
+import { useAuth } from '~/composables/auth/useAuth'
+const { authUser } = useAuth()
+const { t } = useI18n()
 
 const { locales, setLocale, locale } = useI18n()
 const router = useRouter()
+const { logout } = useAuth()
 
 const producto = ref('')
 const idiomaActual = ref(locale.value)
 const inputBusqueda = ref(null)
-const user = ref(null)
 
 const navbarStyle = ref({ opacity: 1 })
 const lastScroll = ref(0)
@@ -144,7 +149,6 @@ const changeLanguage = (code) => {
 
 
 onMounted(async () => {
-    user.value = await getAuthUser()
     lastScroll.value = window.scrollY
     window.addEventListener('scroll', handleScroll)
 })
@@ -153,9 +157,10 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', handleScroll)
 })
 
-const logout = () => {
-    localStorage.removeItem('id_user')
-    user.value = null
+const logoutUser = () => {
+    logout()
+    $showSuccess(t('see_you_soon'))
+    router.push('/')
 }
 </script>
 
