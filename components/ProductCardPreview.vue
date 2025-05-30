@@ -20,14 +20,14 @@
     <button
       v-if="favourite"
       @click="deleteFavourite"
-      class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium p-1 rounded-lg cursor-pointer"
+      class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium p-1 rounded-lg cursor-pointer flex items-center justify-center"
     >
       <DotLottieVue
         v-if="loading"
         src="animations/loading2.lottie"
         autoplay
         loop
-        class="w-27 h-6"
+        class="w-6 h-6"
       />
       <span v-else>{{ $t('delete_favourite') }}</span>
     </button>
