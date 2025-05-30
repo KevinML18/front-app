@@ -1,76 +1,78 @@
 <template>
-    <h2 class="text-2xl font-bold mb-2 hidden md:block">{{ $t('filters') }}:</h2>
-    <div class="flex flex-wrap mt-5 justify-around md:flex-col gap-4 md:gap-10 w-full">
-        <!-- Filtro tienda -->
-        <div class="shop">
-            <label class="block font-bold mb-3">{{ $t('shop') }}:</label>
-            <select v-model="tiendaFilter" class="cursor-pointer bg-slate-900 p-1 rounded-md w-full">
-                <option value="todas">{{ $t('all_shops') }}</option>
-                <option v-for="(tienda, index) in tiendas"
-                    :key="index"
-                    :value="tienda"
-                >
-                    {{ tienda }}
-                </option>
-            </select>
-        </div>
-
-        <!-- Filtro orden -->
-        <div class="orderBy">
-            <label class="block font-bold mb-3">{{ $t('sort_by') }}:</label>
-            <select v-model="orderBy" class="cursor-pointer bg-slate-900 p-1 rounded-md w-full">
-                <option value="default">
-                    {{ $t('default') }}
-                </option>
-                <option value="asc">
-                    {{ $t('price_asc') }}
-                </option>
-                <option value="desc">
-                    {{ $t('price_desc') }}
-                </option>
-            </select>
-        </div>
-
-        <!-- Filtro precio -->
-        <div class="range">
-            <p class="block font-bold mb-3">{{ $t('price_range') }}</p>
-            <el-slider
-                v-model="rango"
-                range
-                :min="minPrice"
-                :max="maxPrice"
-                :step="0.1"
-                :format-tooltip="val => Math.round(val)"
-            />
-            <div class="items-center gap-4 mb-4 hidden sm:flex">
-                <!-- Input mínimo -->
-                <input
-                    type="number"
-                    v-model="rango[0]"
-                    :min="minPrice"
-                    :max="rango[1]"
-                    class="w-20 p-1 rounded-md border border-gray-300"
-                    @blur="rango[0] = Math.floor(rango[0])"
-                />
-                <span> - </span>
-                <!-- Input máximo -->
-                <input
-                    type="number"
-                    v-model="rango[1]"
-                    :min="rango[0]"
-                    :max="maxPrice"
-                    class="w-20 p-1 rounded-md border border-gray-300"
-                />
-            </div>
-        </div>
+  <h2 class="text-2xl font-bold mb-2 hidden md:block">{{ $t('filters') }}:</h2>
+  <div class="flex flex-wrap mt-5 justify-around md:flex-col gap-4 md:gap-10 w-full">
+    <!-- Filtro tienda -->
+    <div class="shop">
+      <label class="block font-bold mb-3">{{ $t('shop') }}:</label>
+      <select v-model="tiendaFilter" class="cursor-pointer bg-slate-900 p-1 rounded-md w-full">
+        <option value="todas">{{ $t('all_shops') }}</option>
+        <option v-for="(tienda, index) in tiendas"
+          :key="index"
+          :value="tienda"
+        >
+          {{ tienda }}
+        </option>
+      </select>
     </div>
-    <!-- Borrar -->
-    <button
-        @click="borrarFiltros"
-        class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-5"
-    >
-        {{ $t('clear_filters') }}
-    </button>
+
+    <!-- Filtro orden -->
+    <div class="orderBy">
+      <label class="block font-bold mb-3">{{ $t('sort_by') }}:</label>
+      <select v-model="orderBy" class="cursor-pointer bg-slate-900 p-1 rounded-md w-full">
+        <option value="default">
+          {{ $t('default') }}
+        </option>
+        <option value="asc">
+          {{ $t('price_asc') }}
+        </option>
+        <option value="desc">
+          {{ $t('price_desc') }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filtro precio -->
+    <div class="range">
+      <p class="block font-bold mb-3">{{ $t('price_range') }}</p>
+      <el-slider
+        v-model="rango"
+        range
+        :min="minPrice"
+        :max="maxPrice"
+        :step="0.1"
+        :format-tooltip="val => Math.round(val)"
+      />
+      <div class="items-center gap-4 mb-4 hidden sm:flex">
+        <!-- Input mínimo -->
+        <input
+          type="text"
+          v-model="rango[0]"
+          disabled
+          :min="minPrice"
+          :max="rango[1]"
+          class="w-20 p-1 rounded-md border-2 bg-slate-800 border-slate-800 text-center"
+          @blur="rango[0] = Math.floor(rango[0])"
+        />
+        <span> - </span>
+        <!-- Input máximo -->
+        <input
+          type="text"
+          disabled
+          v-model="rango[1]"
+          :min="rango[0]"
+          :max="maxPrice"
+          class="w-20 p-1 rounded-md border-2 bg-slate-800 border-slate-800 text-center"
+        />
+      </div>
+    </div>
+  </div>
+  <!-- Borrar -->
+  <button
+      @click="borrarFiltros"
+      class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-5"
+  >
+      {{ $t('clear_filters') }}
+  </button>
 </template>
 
 <script>
@@ -143,7 +145,3 @@ export default defineComponent({
     }
 })
 </script>
-
-<style scoped>
-
-</style>

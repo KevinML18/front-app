@@ -1,46 +1,58 @@
 <template>
-    <div
-        v-if="loading"
-        class="absolute inset-0 bg-slate-950/10 flex flex-col items-center justify-center z-10"
-    >
-        <DotLottieVue
-            src="/animations/loading.lottie"
+  <div
+    v-if="loading"
+    class="absolute inset-0 bg-slate-950/10 flex flex-col items-center justify-center z-10"
+  >
+    <DotLottieVue
+      src="/animations/loading.lottie"
+      autoplay
+      loop
+      class="w-32 h-32"
+    />
+    <h3 class="mt-4 text-xl font-bold text-white">
+      {{ $t('loading') }}
+    </h3>
+  </div>
+  <div v-else>
+    <div class="flex flex-col md:flex-row min-h-screen">
+      <!-- Filtros -->
+      <div class="w-full md:w-1/7 p-4 flex flex-col">
+        <ProductFilters
+          v-if="productosOriginales && productosOriginales.length>= 0"
+          :productos="productosOriginales"
+          @actualizar-filtros="actualizarFiltros"
+          @quitar-filtros="quitarFiltros"
+        />
+      </div>
+      <div class="w-full md:w-6/7 p-4 flex flex-col gap-5">
+        <h1 class="text-2xl font-bold mb-2">
+          {{ $t('results_for') }}: "{{ busqueda }}"
+        </h1>
+        <div
+          v-if="!productosOriginales"
+          class="absolute inset-0 bg-slate-950/10 flex flex-col items-center justify-center z-10"
+        >
+          <DotLottieVue
+            src="/animations/empty.lottie"
             autoplay
             loop
-            class="w-32 h-32"
-        />
-        <h3 class="mt-4 text-xl font-bold text-white">
-            {{ $t('loading') }}
-        </h3>
-    </div>
-
-    <div v-else>
-        <div class="flex flex-col md:flex-row min-h-screen">
-            <!-- Filtros -->
-            <div class="w-full md:w-1/7 p-4 flex flex-col">
-                <ProductFilters
-                    :productos="productosOriginales"
-                    @actualizar-filtros="actualizarFiltros"
-                    @quitar-filtros="quitarFiltros"
-                />
-            </div>
-            <div class="w-full md:w-6/7 p-4 flex flex-col gap-5">
-                <h1 class="text-2xl font-bold mb-2">
-                    {{ $t('results_for') }}: "{{ busqueda }}"
-                </h1>
-                <ProductCard
-                    v-for="item in productosFiltrados || productosOriginales"
-                    :key="item.url"
-                    :name="item.titulo"
-                    :price="item.precio"
-                    :url="item.url"
-                    :shop="item.tienda"
-                    :image="item.imagen_url"
-                    class="product"
-                />
-            </div>
+            class="w-40 h-40"
+          />
         </div>
+        <ProductCard
+          v-else
+          v-for="item in productosFiltrados || productosOriginales"
+          :key="item.url"
+          :name="item.titulo"
+          :price="item.precio"
+          :url="item.url"
+          :shop="item.tienda"
+          :image="item.imagen_url"
+          class="product"
+        />
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -91,38 +103,31 @@ const quitarFiltros = () => {
 
 // Fetch para productos desde la API
 const fetchProductosAmazon = async (producto) => {
-    console.log('BUSCANDO: ', producto)
-    loading.value = true
-    try {
-        const response = await fetch(`http://127.0.0.1:8000/get_productos_amazon/${encodeURIComponent(producto)}`);
-        if (!response.ok)  {
-            throw new Error(`Error HTTP: ${response.status}`)
-        }
+  loading.value = true
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/get_productos_amazon/${encodeURIComponent(producto)}`);
+    if (!response.ok)  {
+      throw new Error(`Error HTTP: ${response.status}`)
+    }
 
-        const data = await response.json()
-        productosOriginales.value = data
-        console.log("Datos recibidos:", data)
-        return data
-    } catch (error) {
-        console.error("Error al obtener los datos:", error)
-    } finally {
-        // loading.value = false
-        await fetchProductosMedia(producto)
+    const data = await response.json()
+    productosOriginales.value = data
+    return data
+  } catch (error) {
+      console.error("Error al obtener los datos:", error)
+  } finally {
+      await fetchProductosMedia(producto)
     }
 }
 
 const fetchProductosMedia = async (producto) => {
-    // console.log('BUSCANDO: ', producto)
-    // loading.value = true
     try {
         const response = await fetch(`http://127.0.0.1:8000/get_productos_mediamarkt/${encodeURIComponent(producto)}`);
         if (!response.ok)  {
             throw new Error(`Error HTTP: ${response.status}`)
         }
-
         const data = await response.json()
         productosOriginales.value.push(...data) 
-        console.log("Datos recibidos media:", data)
         return data
     } catch (error) {
         console.error("Error al obtener los datos:", error)

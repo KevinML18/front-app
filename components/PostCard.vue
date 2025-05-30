@@ -106,8 +106,6 @@ export default defineComponent({
         }
         return this.$t('more_than_a_year')
       }
-
-      console.log(timeFromNow)
     }
   }
 })

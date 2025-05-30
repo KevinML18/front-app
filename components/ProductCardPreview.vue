@@ -15,26 +15,41 @@
       >
         {{ truncatedTitle }}
       </a>
-      <p class="text-lg mt-1">{{ product.precio }} €</p>
+      <p class="text-lg mt-1">{{ product.precio }}€</p>
     </div>
     <button
       v-if="favourite"
       @click="deleteFavourite"
       class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium p-1 rounded-lg cursor-pointer"
     >
-      {{ $t('delete_favourite') }}
+      <DotLottieVue
+        v-if="loading"
+        src="animations/loading2.lottie"
+        autoplay
+        loop
+        class="w-27 h-6"
+      />
+      <span v-else>{{ $t('delete_favourite') }}</span>
     </button>
     <ElButton
       v-else
       @click="addFavourite"
       class="btn-custom"
     >
-      {{ $t('set_alert') }}
+      <DotLottieVue
+        v-if="loading"
+        src="animations/loading2.lottie"
+        autoplay
+        loop
+        class="w-27 h-6"
+      />
+      <span v-else>{{ $t('set_alert') }}</span>
     </ElButton>
   </div>
 </template>
 
 <script setup>
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { computed } from 'vue'
 import { defineProps } from 'vue'
 import { useAuth } from '~/composables/auth/useAuth'
@@ -61,17 +76,11 @@ const truncatedTitle = computed(() => {
     : props.product.titulo
 })
 
-onMounted(() => {
-  // console.log(props.product)
-})
-
 const addFavourite = async () => {
-  console.log('EMPIEZO')
   if(authUser.value) {
     loading.value = true
     const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.product.titulo)}&precio=${encodeURIComponent(props.product.precio)}&imagen_url=${encodeURIComponent(props.product.imagen_url)}&url=${encodeURIComponent(props.product.url)}&id_usuario=${encodeURIComponent(authUser.value.id)}&tienda=${encodeURIComponent(props.product.tienda)}`
-    console.log('ENVIANDO: ', urlF)
-
+    
     const response = await fetch(urlF, { method: 'POST' })
 
     const data = await response.json()
@@ -84,7 +93,6 @@ const addFavourite = async () => {
     }
     loading.value = false
   } else {
-    console.log('NO esta logueado')
     eventBus.emit('show-auth-form', 'login')
   }
 }

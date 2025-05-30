@@ -36,7 +36,7 @@
               <img
                 :src="getFlag(idiomaActual)"
                 :alt="idiomaActual"
-                class="w-9 h-auto hidden md:block"
+                class="w-10 h-auto hidden md:block"
               />
             </div>
             <template #dropdown>
@@ -56,7 +56,7 @@
         <div class="cursor-pointer flex flex-wrap items-center" v-if="authUser">
           <el-dropdown trigger="click" popper-class="dropdown-custom">
             <img
-              :class="authUser.foto ? 'w-10 h-10 rounded-full': 'w-10 bg-cyan-50 rounded-full'"
+              :class="authUser.foto ? 'w-11 h-11 rounded-full': 'w-11 bg-cyan-50 rounded-full'"
               :src="authUser.foto ? authUser.foto : '/default_pic.png'"
               alt="profile picture"
             >
