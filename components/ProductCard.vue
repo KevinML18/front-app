@@ -4,10 +4,11 @@
     <div class="flex-1">
       <a
         :href="url" 
+        :title="name"
         class="md:text-xl font-semibold text-emerald-400 hover:text-emerald-600 active:text-emerald-700"
         target="_blank"
       >
-        {{ name }}
+        {{ truncatedTitle }}
       </a>
       <p>{{ $t('shop') }}: {{ shop }}</p>
       <p class="text-white text-lg">{{ $t('price') }}: {{ price }}€</p>
@@ -53,9 +54,8 @@ import { useRoute } from 'vue-router'
 
 const { authUser } = useAuth()
 const route = useRoute()
-
-
 const { t } = useI18n()
+
 const props = defineProps({
     name: {
         type: String
@@ -76,6 +76,13 @@ const props = defineProps({
 
 const favourite = ref(false)
 const loading = ref(false)
+
+const truncatedTitle = computed(() => {
+  const maxLength = 150
+  return props.name.length > maxLength
+    ? props.name.slice(0, maxLength) + '…'
+    : props.name
+})
 
 const addFavourite = async () => {
   if(authUser.value) {
