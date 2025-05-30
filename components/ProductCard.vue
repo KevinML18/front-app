@@ -14,7 +14,7 @@
     </div>
     <div class="flex flex-col gap-3">
       <button
-        v-if="favourite"
+        v-if="favourite || route.name === 'profile'"
         class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium px-4 py-2 rounded-lg cursor-pointer"
         @click="deleteFavourite"
       >
@@ -48,9 +48,12 @@
 <script setup>
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { useAuth } from '~/composables/auth/useAuth'
+import { eventBus } from '@/utils/eventBus'
+import { useRoute } from 'vue-router'
 
-const router = useRoute()
 const { authUser } = useAuth()
+const route = useRoute()
+
 
 const { t } = useI18n()
 const props = defineProps({
@@ -75,9 +78,9 @@ const favourite = ref(false)
 const loading = ref(false)
 
 const addFavourite = async () => {
-  if(authUser) {
+  if(authUser.value) {
     loading.value = true
-    const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent(ide)}&tienda=${encodeURIComponent(props.shop)}`
+    const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent(authUser.value.id)}&tienda=${encodeURIComponent(props.shop)}`
 
     const response = await fetch(urlF, { method: 'POST' })
 
@@ -90,13 +93,15 @@ const addFavourite = async () => {
       $showSuccess(t('product_added_to_favourites'))
     }
     loading.value = false
+  } else {
+    console.log('NO esta logueado')
+    eventBus.emit('show-auth-form', 'login')
   }
 }
 
 const deleteFavourite = async () => {
   loading.value = true
-  const ide = localStorage.getItem('id_user')
-  const urlF = `${getApiUrl()}/eliminar_favorito/?ide=${encodeURIComponent(ide)}&titulo=${encodeURIComponent(props.name)}`
+  const urlF = `${getApiUrl()}/eliminar_favorito/?ide=${encodeURIComponent(authUser.value.id)}&titulo=${encodeURIComponent(props.name)}`
 
   const response = await fetch(urlF, { method: 'POST' })
   const data = await response.json()

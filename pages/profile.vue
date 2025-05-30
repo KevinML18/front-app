@@ -2,73 +2,87 @@
   <div>
     <el-tabs v-model="tabActive" @tab-change="changeTab" stretch="false" class="">
       <el-tab-pane :label="$t('profile')" name="tab-1">
-        <div class="flex flex-col items-center justify-center">
-          <img :src="pic" alt="profilePic" class="w-30 h-30 rounded-full mx-auto">
-          <span class="text-2xl text-emerald-500 mt-2">Bad Bunny</span>
+        <div class="flex flex-col items-center justify-center mt-10">
+          <img :src="authUser.foto ? authUser.foto : '/default_pic.png'" alt="profilePic" :class="authUser.foto ? 'w-25 h-25 rounded-full mx-auto': 'w-25 h-25 bg-cyan-50 rounded-full'">
+          <span class="text-2xl text-emerald-500 mt-2">{{ authUser.nombre_usuario }}</span>
           <div class="flex flex-row">
-            <button class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 cursor-pointer rounded-md p-0.5 ml-2 mt-5">
+            <button
+              @click="updloadPhoto"
+              class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 cursor-pointer rounded-md p-0.5 ml-2 mt-5"
+            >
               {{ $t('change') }}
             </button>
-            <button class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-5">
+            <button
+              @click="updateUser"
+              class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-5"
+            >
               {{ $t('delete') }}
             </button>
           </div>
         </div>
         <div class="flex items-center justify-center">
-          <form class="flex flex-col p-10 rounded-xl gap-3 w-full max-w-md">
-            <label>
-              {{ $t('your_name') }}
-            </label>
-            <input
-              type="text"
-              v-model="name"
-              class="bg-gray-900 p-1.5 rounded-md"
-              placeholder="Benito Martinez Ocasio"
+          <ElForm
+            class="custom-form"
+            require-asterisk-position="right"
+            ref="ruleFormRef"
+            :model="form"
+            :rules="rules"
+            label-position="top"
+          >
+            <ElFormItem
+              :label="$t('name')"
+              prop="name"
+              @keydown.enter.prevent="submit(ruleFormRef)"
             >
-            <label class="mt-3">
-              {{ $t('your_username') }}
-            </label>
-            <input
-              type="text"
-              v-model="username"
-              class="bg-gray-900 p-1.5 rounded-md"
-              placeholder="Badbo"
+              <ElInput v-model="form.name" class="input-custom" :placeholder="authUser.nombre"/>
+            </ElFormItem>
+            <ElFormItem
+              :label="$t('last_name')"
+              prop="lastname"
+              @keydown.enter.prevent="submit(ruleFormRef)"
             >
-            
-            <label class="mt-3">
-              {{ $t('your_email') }}
-            </label>
-            <input
+              <ElInput v-model="form.lastname" class="input-custom" :placeholder="authUser.apellidos"/>
+            </ElFormItem>
+            <ElFormItem
+              :label="$t('username')"
+              prop="username"
+              @keydown.enter.prevent="submit(ruleFormRef)"
+            >
+              <ElInput v-model="form.username" class="input-custom" :placeholder="authUser.nombre_usuario"/>
+            </ElFormItem>
+            <ElFormItem
+              :label="$t('email')"
+              prop="userEmail"
               type="email"
-              v-model="email"
-              class="bg-gray-900 p-1.5 rounded-md"
-              placeholder="bad@sanbenito"  
+              @keydown.enter.prevent="submit(ruleFormRef)"
             >
-
-            <label class="mt-3">
-              {{ $t('change_password') }}
-            </label>
-            <input
-              type="text"
-              v-model="password"
-              class="bg-gray-900 p-1.5 rounded-md"
+              <ElInput v-model="form.userEmail" class="input-custom" :placeholder="authUser.email"/>
+            </ElFormItem>
+            <ElFormItem
+              :label="$t('password')"
+              prop="password"
+              @keydown.enter.prevent="submit(ruleFormRef)"
             >
+              <ElInput v-model="form.password" type="password" show-password class="input-custom" />
+            </ElFormItem>
             <button
               class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 cursor-pointer rounded-md p-0.5 ml-2 mt-2"
-              @click="validateForm"  
+              @click.prevent="submit"
             >
               {{ $t('save_changes') }}
             </button>
-            <button class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-2">
+            <button class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-2"
+              @click="deleteUser"
+            >
               {{ $t('delete_account') }}
             </button>
-          </form>
+          </ElForm>
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('my_alerts')" name="tab-2">
-        <div class="w-full p-4 flex flex-col items-center gap-5">
+        <div class="w-full p-4 flex flex-col items-center gap-5 mt-5">
           <ProductCard
-            v-for="item in favoriteProducts"
+            v-for="item in favourites"
             :key="item.url"
             :name="item.titulo"
             :price="item.precio"
@@ -90,99 +104,93 @@
           />
         </div>
       </el-tab-pane> -->
-      <el-tab-pane :label="$t('posts')" name="tab-4">
+      <!-- <el-tab-pane :label="$t('posts')" name="tab-4">
         
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-import { ElTabs, ElTabPane } from 'element-plus'
+<script setup>
+import { ElForm, ElFormItem, ElInput, ElButton, ElTabs, ElTabPane } from 'element-plus'
+import { useAuth } from '~/composables/auth/useAuth'
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  components: { ElTabs, ElTabPane },
-  data() {
-    return {
-      tabActive: 'tab-1',
-      name: '',
-      username: '',
-      email: '',
-      password: '',
-      favoriteProducts: [],
-      followers: [],
-      pic: 'https://estaticos-cdn.prensaiberica.es/clip/227de772-25cf-41d5-87c0-fd76d8078c6f_16-9-discover-aspect-ratio_default_0.jpg'
-    }
-  },
-  mounted() {
-    this.favoriteProducts = this.getFavoriteProducts()
-    this.followers = this.getFollowers()
-  },
-  methods: {
-    changeTab(tab, event) {
-      console.log(tab, event)
-    },
-    validateForm() {
-      
-    },
-    getFavoriteProducts() {
-      return [
-        {
-          "titulo": "Apple iPhone 16 de 256 GB: Smartphone 5G con Control de Cámara, Chip A18 y un subidón en autonomía. Compatible con los AirPods; Azul Ultramar",
-          "precio": "969.00",
-          "tienda": "Amazon",
-          "imagen_url": "https://m.media-amazon.com/images/I/712Pyq1hPfL._AC_SX679_.jpg",
-          "url": "https://www.amazon.es/sspa/click?ie=UTF8&spc=MToxNzUyMDgwNzg3OTQ5NDY4OjE3NDUzNDU2MjI6c3BfYXRmOjMwMDMzMjI2MTc5OTMzMjo6MDo6&url=%2FApple-iPhone-256-Smartphone-autonom%25C3%25ADa%2Fdp%2FB0DGJ7Q246%2Fref%3Dsr_1_1_sspa%3Fdib%3DeyJ2IjoiMSJ9.Kxvg9w-qEZ8doLuDhLfcybKnDcj42ux5JwhEAUcInT6XJbDIEbkpHFe9gLRmc8VUFgVzZdOgixf2mepH6B4QlfaoxrnbAQv02NSKZ7XnhL0t1NSQFz6aiJLVQPsmRHp2MO5okf7eA8yr8YLtQMrznAAj9cLFmk-_9c6zTv8OlXaGUwGW1Wt65kW3khSkgw0s6EaZ_KVpdtBW1mj3SbkBtgnjNclctQYienAsjC3xgpY5gzRocieVHFmyDcRV38S530e6LFKHm5c91o_PDNRo-OcWa6rwgAYMQAsCPLDmrrM.Vb7OCEhQ0M_CuVCbdWBG6hIcfF5CeL0KyVadgkXrpTQ%26dib_tag%3Dse%26keywords%3Diphone%2B16%26qid%3D1745345622%26sr%3D8-1-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1"
-        },
-        {
-          "titulo": "Apple iPhone 16e de 128 GB: Diseñado para Apple Intelligence, Chip A18, autonomía a raudales, cámara Fusion de 48 Mpx, Pantalla Super Retina XDR de 6,1 Pulgadas — Blanco",
-          "precio": "669.90",
-          "tienda": "Amazon",
-          "imagen_url": "https://m.media-amazon.com/images/I/610vqacJO2L._AC_SX679_.jpg",
-          "url": "https://www.amazon.es/sspa/click?ie=UTF8&spc=MToxNzUyMDgwNzg3OTQ5NDY4OjE3NDUzNDU2MjI6c3BfYXRmOjMwMDQ4NTQ0NzQ4MzczMjo6MDo6&url=%2FApple-iPhone-16e-128-Intelligence%2Fdp%2FB0DXRKKF8N%2Fref%3Dsr_1_2_sspa%3Fdib%3DeyJ2IjoiMSJ9.Kxvg9w-qEZ8doLuDhLfcybKnDcj42ux5JwhEAUcInT6XJbDIEbkpHFe9gLRmc8VUFgVzZdOgixf2mepH6B4QlfaoxrnbAQv02NSKZ7XnhL0t1NSQFz6aiJLVQPsmRHp2MO5okf7eA8yr8YLtQMrznAAj9cLFmk-_9c6zTv8OlXaGUwGW1Wt65kW3khSkgw0s6EaZ_KVpdtBW1mj3SbkBtgnjNclctQYienAsjC3xgpY5gzRocieVHFmyDcRV38S530e6LFKHm5c91o_PDNRo-OcWa6rwgAYMQAsCPLDmrrM.Vb7OCEhQ0M_CuVCbdWBG6hIcfF5CeL0KyVadgkXrpTQ%26dib_tag%3Dse%26keywords%3Diphone%2B16%26qid%3D1745345622%26sr%3D8-2-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1"
-        },
-        {
-          "titulo": "Apple iPhone 15 (128 GB) - Verde",
-          "precio": "729.00",
-          "tienda": "Amazon",
-          "imagen_url": "https://m.media-amazon.com/images/I/71oGc0hDt7L._AC_SX679_.jpg",
-          "url": "https://www.amazon.es/sspa/click?ie=UTF8&spc=MToxNzUyMDgwNzg3OTQ5NDY4OjE3NDUzNDU2MjI6c3BfYXRmOjMwMDA1NDUyODEwMDczMjo6MDo6&url=%2FApple-iPhone-15-128-GB%2Fdp%2FB0CHX11FBS%2Fref%3Dsr_1_3_sspa%3Fdib%3DeyJ2IjoiMSJ9.Kxvg9w-qEZ8doLuDhLfcybKnDcj42ux5JwhEAUcInT6XJbDIEbkpHFe9gLRmc8VUFgVzZdOgixf2mepH6B4QlfaoxrnbAQv02NSKZ7XnhL0t1NSQFz6aiJLVQPsmRHp2MO5okf7eA8yr8YLtQMrznAAj9cLFmk-_9c6zTv8OlXaGUwGW1Wt65kW3khSkgw0s6EaZ_KVpdtBW1mj3SbkBtgnjNclctQYienAsjC3xgpY5gzRocieVHFmyDcRV38S530e6LFKHm5c91o_PDNRo-OcWa6rwgAYMQAsCPLDmrrM.Vb7OCEhQ0M_CuVCbdWBG6hIcfF5CeL0KyVadgkXrpTQ%26dib_tag%3Dse%26keywords%3Diphone%2B16%26qid%3D1745345622%26sr%3D8-3-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1"
-        },
-        {
-          "titulo": "Apple iPhone 15 (128 GB) - Verde",
-          "precio": "729.00",
-          "tienda": "Amazon",
-          "imagen_url": "https://m.media-amazon.com/images/I/71oGc0hDt7L._AC_SX679_.jpg",
-          "url": "https://www.amazon.es/sspa/click?ie=UTF8&spc=MToxNzUyMDgwNzg3OTQ5NDY4OjE3NDUzNDU2MjI6c3BfYXRmOjMwMDA1NDUyODEwMDczMjo6MDo6&url=%2FApple-iPhone-15-128-GB%2Fdp%2FB0CHX11FBS%2Fref%3Dsr_1_3_sspa%3Fdib%3DeyJ2IjoiMSJ9.Kxvg9w-qEZ8doLuDhLfcybKnDcj42ux5JwhEAUcInT6XJbDIEbkpHFe9gLRmc8VUFgVzZdOgixf2mepH6B4QlfaoxrnbAQv02NSKZ7XnhL0t1NSQFz6aiJLVQPsmRHp2MO5okf7eA8yr8YLtQMrznAAj9cLFmk-_9c6zTv8OlXaGUwGW1Wt65kW3khSkgw0s6EaZ_KVpdtBW1mj3SbkBtgnjNclctQYienAsjC3xgpY5gzRocieVHFmyDcRV38S530e6LFKHm5c91o_PDNRo-OcWa6rwgAYMQAsCPLDmrrM.Vb7OCEhQ0M_CuVCbdWBG6hIcfF5CeL0KyVadgkXrpTQ%26dib_tag%3Dse%26keywords%3Diphone%2B16%26qid%3D1745345622%26sr%3D8-3-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1"
-        },
-        {
-          "titulo": "Apple iPhone 15 (128 GB) - Verde",
-          "precio": "729.00",
-          "tienda": "Amazon",
-          "imagen_url": "https://m.media-amazon.com/images/I/71oGc0hDt7L._AC_SX679_.jpg",
-          "url": "https://www.amazon.es/sspa/click?ie=UTF8&spc=MToxNzUyMDgwNzg3OTQ5NDY4OjE3NDUzNDU2MjI6c3BfYXRmOjMwMDA1NDUyODEwMDczMjo6MDo6&url=%2FApple-iPhone-15-128-GB%2Fdp%2FB0CHX11FBS%2Fref%3Dsr_1_3_sspa%3Fdib%3DeyJ2IjoiMSJ9.Kxvg9w-qEZ8doLuDhLfcybKnDcj42ux5JwhEAUcInT6XJbDIEbkpHFe9gLRmc8VUFgVzZdOgixf2mepH6B4QlfaoxrnbAQv02NSKZ7XnhL0t1NSQFz6aiJLVQPsmRHp2MO5okf7eA8yr8YLtQMrznAAj9cLFmk-_9c6zTv8OlXaGUwGW1Wt65kW3khSkgw0s6EaZ_KVpdtBW1mj3SbkBtgnjNclctQYienAsjC3xgpY5gzRocieVHFmyDcRV38S530e6LFKHm5c91o_PDNRo-OcWa6rwgAYMQAsCPLDmrrM.Vb7OCEhQ0M_CuVCbdWBG6hIcfF5CeL0KyVadgkXrpTQ%26dib_tag%3Dse%26keywords%3Diphone%2B16%26qid%3D1745345622%26sr%3D8-3-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1"
-        }
-      ]
-    },
-    getFollowers() {
-      return [
-        {
-          username: 'romeosantos',
-          seguidores: '23',
-          seguidos: '18',
-          publicaciones: '5'
-        },
-        {
-          username: 'anueldoblea',
-          seguidores: '18',
-          seguidos: '23',
-          publicaciones: '10'
-        },
-      ]
-    }
-  }
+const { authUser } = useAuth()
+const { t } = useI18n()
+const router = useRouter()
+
+const tabActive = ref('tab-1')
+const favourites = ref([])
+const ruleFormRef = ref()
+
+const form = reactive({
+  name: '',
+  lastname: '',
+  username: '',
+  userEmail: '',
+  password: ''
 })
+
+const rules = reactive({
+  userEmail: [
+    {
+      type: 'email',
+      message: t('invalid_email'),
+      trigger: ['blur', 'change'],
+    }
+  ]
+})
+
+onMounted(() => {
+  getFavoritos()
+})
+
+const submit = async () => {
+  try {
+    await ruleFormRef.value.validate()
+    updateUser()
+  } catch (errors) {
+    $showError(t('invalid_email'))
+  }
+}
+
+const getFavoritos = async () => {
+  const url = `${getApiUrl()}/mostrar_favorito/?id=${encodeURIComponent(parseInt(authUser.value.id))}`
+  const response = await fetch(url, { method: 'GET'} )
+  const data = await response.json()
+  favourites.value = data
+}
+
+const updateUser = async() => {
+  const newUsername = form.username || authUser.value.nombre_usuario
+  const newName = form.name || authUser.value.nombre
+  const newLastname = form.lastname || authUser.value.apellidos
+  const newEmail = form.userEmail || authUser.value.email
+  const photo = authUser.value.foto || null
+  
+  const url = `${getApiUrl()}/actualizar_usuario/?nombre_usuario=${encodeURIComponent(newUsername)}&nombre=${encodeURIComponent(newName)}&apellidos=${encodeURIComponent(newLastname)}&email=${encodeURIComponent(newEmail)}&password=${encodeURIComponent('123')}&foto=${photo}&id=${encodeURIComponent(authUser.value.id)}`
+
+  const response = await fetch(url, { method: 'POST' })
+  const data = await response.json()
+
+  if ("error" in data) {
+    $showError(data.msg)
+  } else {
+    authUser.value = {
+      ...authUser.value,
+      nombre_usuario: newUsername,
+      nombre: newName,
+      apellidos: newLastname,
+      email: newEmail,
+      foto: photo
+    }
+    router.go(0)
+    $showSuccess('updated_profile')
+  }
+}
+
+
 </script>
 
 <style scoped>

@@ -60,5 +60,7 @@
     "logout": "Cerrar sesión",
     "product_added_to_favourites": "Producto añadido a favoritos",
     "delete_favourite": "Borrar favorito",
-    "product_deleted_from_favourites": "Favorito borrado"
+    "product_deleted_from_favourites": "Favorito borrado",
+    "access": "Acceder",
+    "updated_user": "Usuario actualizado"
 }

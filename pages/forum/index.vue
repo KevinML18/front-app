@@ -25,7 +25,7 @@
     to="/"
     class="fixed bottom-5 right-5 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg cursor-pointer shadow-lg z-50"  
   >
-    {{ $t('buypilot') }}
+    BuyPilot
   </nuxt-link>
 </template>
 

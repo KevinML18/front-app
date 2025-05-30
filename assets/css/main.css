@@ -98,9 +98,40 @@
 }
 
 .btn-custom:focus-visible {
-  background-color: #047857 !important;
+  background-color: #10b981 !important;
   outline: none !important;
 }
+
+/* BOTON PESONALIZADO RED */
+.btn-custom-red {
+  background-color: #e11d48 !important; /* rose-600 */
+  color: white !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: background-color 0.2s ease !important;
+  user-select: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 600 !important;
+}
+
+.btn-custom-red:hover {
+  background-color: #be123c !important; /* rose-700 */
+}
+
+.btn-custom-red:active {
+  background-color: #9f1239 !important; /* rose-800 */
+  outline: none !important;
+}
+
+.btn-custom-red:focus-visible {
+  background-color: #9f1239 !important;
+  outline: none !important;
+}
+
 
 .my-dialog {
   background-color: #0f172a !important;

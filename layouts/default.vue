@@ -10,12 +10,14 @@
     <main class="md:pt-27 pt-23">
       <slot />
     </main>
+    <FooterComp />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { ElDialog } from 'element-plus'
+import { eventBus } from '@/utils/eventBus'
 const registerForm = ref(false)
 const loginForm = ref(false)
 
@@ -31,4 +33,12 @@ const showAuthForm = (form = 'login') => {
     loginForm.value = true
   }
 }
+
+onMounted(() => {
+  eventBus.on('show-auth-form', showAuthForm)
+})
+
+onBeforeUnmount(() => {
+  eventBus.off('show-auth-form', showAuthForm)
+})
 </script>

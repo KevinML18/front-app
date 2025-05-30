@@ -4,7 +4,7 @@ import { useCookie } from '#app'
 const authUser = ref(null)
 
 export function useAuth() {
-  const userCookie = useCookie('auth_user')
+  const userCookie = useCookie('auth_user', { path: '/', maxAge: 60 * 60 * 24 * 7 })
 
   if (userCookie.value) {
     authUser.value = userCookie.value
@@ -12,7 +12,7 @@ export function useAuth() {
 
   watch(authUser, (newVal) => {
     userCookie.value = newVal
-  })
+  }, { deep: true })
 
   function login(userData) {
     authUser.value = userData

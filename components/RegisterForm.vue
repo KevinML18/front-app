@@ -1,59 +1,62 @@
 <template>
-  <ElForm
-    class="custom-form"
-    require-asterisk-position="right"
-    ref="ruleFormRef"
-    :rules="inputRules"
-    :model="form"
-    label-position="top"
-  >
-    <ElFormItem
-      :label="$t('name')"
-      prop="name"
-      @keydown.enter.prevent="submit(ruleFormRef)"
+  <div>
+    <ElForm
+      class="custom-form"
+      require-asterisk-position="right"
+      ref="ruleFormRef"
+      :rules="inputRules"
+      :model="form"
+      label-position="top"
     >
-      <ElInput v-model="form.name" class="input-custom" />
-    </ElFormItem>
-    <ElFormItem
-      :label="$t('last_name')"
-      prop="lastname"
-      @keydown.enter.prevent="submit(ruleFormRef)"
-    >
-      <ElInput v-model="form.lastname" class="input-custom" />
-    </ElFormItem>
-    <ElFormItem
-      :label="$t('username')"
-      prop="username"
-      @keydown.enter.prevent="submit(ruleFormRef)"
-    >
-      <ElInput v-model="form.username" class="input-custom" />
-    </ElFormItem>
-    <ElFormItem
-      :label="$t('email')"
-      prop="userEmail"
-      :error="invalidEmail ? t('invalid_email') : ''"
-      :validate-status="v$.userEmail.$error ? 'error' : ''"
-      @keydown.enter.prevent="submit(ruleFormRef)"
-    >
-      <ElInput v-model="form.userEmail" class="input-custom" />
-    </ElFormItem>
-    <ElFormItem
-      :label="$t('password')"
-      prop="password"
-      @keydown.enter.prevent="submit(ruleFormRef)"
-    >
-      <ElInput v-model="form.password" type="password" show-password class="input-custom" />
-    </ElFormItem>
-    <ElButton @click.prevent="submit(ruleFormRef)" class="btn-custom w-full" type="primary">
-      {{ $t('register') }}
-    </ElButton>
+      <ElFormItem
+        :label="$t('name')"
+        prop="name"
+        @keydown.enter.prevent="submit(ruleFormRef)"
+      >
+        <ElInput v-model="form.name" class="input-custom" />
+      </ElFormItem>
+      <ElFormItem
+        :label="$t('last_name')"
+        prop="lastname"
+        @keydown.enter.prevent="submit(ruleFormRef)"
+      >
+        <ElInput v-model="form.lastname" class="input-custom" />
+      </ElFormItem>
+      <ElFormItem
+        :label="$t('username')"
+        prop="username"
+        @keydown.enter.prevent="submit(ruleFormRef)"
+      >
+        <ElInput v-model="form.username" class="input-custom" />
+      </ElFormItem>
+      <ElFormItem
+        :label="$t('email')"
+        prop="userEmail"
+        type="email"
+        :error="invalidEmail ? t('invalid_email') : ''"
+        :validate-status="v$.userEmail.$error ? 'error' : ''"
+        @keydown.enter.prevent="submit(ruleFormRef)"
+      >
+        <ElInput v-model="form.userEmail" class="input-custom" />
+      </ElFormItem>
+      <ElFormItem
+        :label="$t('password')"
+        prop="password"
+        @keydown.enter.prevent="submit(ruleFormRef)"
+      >
+        <ElInput v-model="form.password" type="password" show-password class="input-custom" />
+      </ElFormItem>
+      <ElButton @click.prevent="submit(ruleFormRef)" class="btn-custom w-full" type="primary">
+        {{ $t('register') }}
+      </ElButton>
+    </ElForm>
     <span
       class="text-white flex justify-center mt-4 cursor-pointer hover:text-slate-200 active:text-slate-300"
       @click="$emit('show-auth-form', 'login')"
     >
       {{ $t('login_redirect') }}
     </span>
-  </ElForm>
+  </div>
 </template>
 
 
@@ -115,6 +118,13 @@ const inputRules = reactive({
       trigger: ['blur', 'change']
     }
   ],
+  userEmail: [
+    {
+      type: 'email',
+      message: t('invalid_email'),
+      trigger: ['blur', 'change'],
+    }
+  ],
   password: [
     {
       required: true,
@@ -143,17 +153,6 @@ const submit = async (formEl) => {
   })
   if (!v$.value.$invalid) {
     register()
-  } else {
-    for (const key in v$.value) {
-      if (v$.value[key]?.$invalid) {
-        const errors = v$.value[key].$errors
-        if (errors.length) {
-          invalidEmail.value = true
-          $showError(t('invalid_email'))
-          break
-        }
-      }
-    }
   }
 }
 
