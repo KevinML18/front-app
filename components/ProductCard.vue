@@ -47,6 +47,10 @@
 
 <script setup>
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
+import { useAuth } from '~/composables/auth/useAuth'
+
+const router = useRoute()
+const { authUser } = useAuth()
 
 const { t } = useI18n()
 const props = defineProps({
@@ -71,21 +75,22 @@ const favourite = ref(false)
 const loading = ref(false)
 
 const addFavourite = async () => {
-  loading.value = true
-  const ide = localStorage.getItem('id_user')
-  const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent(ide)}&tienda=${encodeURIComponent(props.shop)}`
+  if(authUser) {
+    loading.value = true
+    const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent(ide)}&tienda=${encodeURIComponent(props.shop)}`
 
-  const response = await fetch(urlF, { method: 'POST' })
+    const response = await fetch(urlF, { method: 'POST' })
 
-  const data = await response.json()
+    const data = await response.json()
 
-  if ("error" in data) {
-    $showError(data.msg)
-  } else {
-    favourite.value = true
-    $showSuccess(t('product_added_to_favourites'))
+    if ("error" in data) {
+      $showError(data.msg)
+    } else {
+      favourite.value = true
+      $showSuccess(t('product_added_to_favourites'))
+    }
+    loading.value = false
   }
-  loading.value = false
 }
 
 const deleteFavourite = async () => {

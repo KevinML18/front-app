@@ -15,7 +15,7 @@
                     ref="inputBusqueda"
                     type="text"
                     v-model="producto"
-                    class="bg-gray-900 p-2 rounded-xl text-white md:w-150 "
+                    class="bg-gray-900 p-2 rounded-xl text-white md:w-150"
                     :placeholder="$t('search_message')"
                     @keyup.enter="buscar"
                 />
@@ -84,12 +84,12 @@
                     </el-dropdown>
                 </div>
                 <div v-else>
-                    <button
+                    <ElButton
                         @click="$emit('show-auth-form')"
-                        class="cursor-pointer hover:text-slate-300 active:text-slate-400"
+                        class="btn-custom"
                     >
                         {{ $t('register') }} / {{ $t('login') }}
-                    </button>
+                    </ElButton>
                 </div>
             </div>
         </div>
@@ -100,8 +100,9 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { LogOut, Search } from 'lucide-vue-next';
-import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus';
 import { useAuth } from '~/composables/auth/useAuth'
+
 const { authUser } = useAuth()
 const { t } = useI18n()
 

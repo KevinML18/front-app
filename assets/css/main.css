@@ -1,13 +1,31 @@
 @import "tailwindcss";
 
-/* Aplica a el contenedor principal que tiene clase input-custom */
+/* INPUT PERSONALIZADO */
 .input-custom {
-  background-color: #1e293b !important;
+  background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-/* Aplica al input real dentro del componente */
+.input-custom .el-input__wrapper {
+  background-color: #1e293b !important; /* bg-gray-900 */
+  border-radius: 8px !important;
+  padding: 2px !important;
+  box-shadow: none !important;
+}
+
+.input-custom:focus-within .el-input__wrapper {
+  box-shadow: 0 0 0 2px #059669 !important;
+}
+
+
+.input-custom input.el-input__inner {
+  color: white !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 5px !important;
+}
+
 .input-custom > .el-input__inner {
   background-color: #1e293b !important; /* slate-800 */
   color: white !important;
@@ -21,7 +39,7 @@
 .custom-form > .el-form-item__inner {
   color: white;
 }
-/* Focus */
+
 .input-custom > .el-input__inner:focus {
   outline: none !important;
   box-shadow: 0 0 0 2px #059669 !important; /* emerald-500 */
@@ -42,18 +60,19 @@
   cursor: pointer;
   transition: color 0.2s ease;
   display: flex;
+  margin-right: 2px;
 }
 
-.custom-form .el-form-item span:hover {
-  color: #cbd5e1 !important; /* slate-300 */
+/* .custom-form .el-form-item span:hover {
+  color: #cbd5e1 !important;
 }
 
 .custom-form .el-form-item span:active {
-  color: #94a3b8 !important; /* slate-400 */
-}
+  color: #94a3b8 !important;
+} */
 
 
-
+/* BOTÓN PERSONALIZADO */
 .btn-custom {
   background-color: #10b981 !important; /* emerald-500 */
   color: white !important;
@@ -79,8 +98,8 @@
 }
 
 .btn-custom:focus-visible {
-  outline: 2px solid #059669 !important;
-  outline-offset: 2px !important;
+  background-color: #047857 !important;
+  outline: none !important;
 }
 
 .my-dialog {

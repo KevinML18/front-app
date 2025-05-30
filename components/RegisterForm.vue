@@ -42,16 +42,17 @@
       prop="password"
       @keydown.enter.prevent="submit(ruleFormRef)"
     >
-      <ElInput v-model="form.password" class="input-custom" />
+      <ElInput v-model="form.password" type="password" show-password class="input-custom" />
     </ElFormItem>
-    <ElFormItem>
-      <span @click="$emit('show-auth-form', 'login')">
-        {{ $t('login_redirect') }}
-      </span>
-      <ElButton @click.prevent="submit(ruleFormRef)" class="btn-custom w-full" type="primary">
-        {{ $t('register') }}
-      </ElButton>
-    </ElFormItem>
+    <ElButton @click.prevent="submit(ruleFormRef)" class="btn-custom w-full" type="primary">
+      {{ $t('register') }}
+    </ElButton>
+    <span
+      class="text-white flex justify-center mt-4 cursor-pointer hover:text-slate-200 active:text-slate-300"
+      @click="$emit('show-auth-form', 'login')"
+    >
+      {{ $t('login_redirect') }}
+    </span>
   </ElForm>
 </template>
 
@@ -170,7 +171,6 @@ const register = async () => {
   if ("error" in data) {
     $showError(data.msg)
   } else {
-    console.log('guardado')
     emit('show-auth-form', 'login')
   }
 }

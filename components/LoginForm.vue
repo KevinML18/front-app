@@ -1,37 +1,40 @@
 <template>
-  <ElForm
-    class="custom-form"
-    require-asterisk-position="right"
-    ref="ruleFormRef"
-    :rules="inputRules"
-    :model="form"
-    label-position="top"
-  >
-    <ElFormItem
-      :label="$t('email')"
-      prop="userEmail"
-      :error="invalidEmail ? t('invalid_email') : ''"
-      :validate-status="v$.userEmail.$error ? 'error' : ''"
-      @keydown.enter.prevent="submit(ruleFormRef)"
+  <div>
+    <ElForm
+      class="custom-form"
+      require-asterisk-position="right"
+      ref="ruleFormRef"
+      :rules="inputRules"
+      :model="form"
+      label-position="top"
     >
-      <ElInput v-model="form.userEmail" class="input-custom" />
-    </ElFormItem>
-    <ElFormItem
-      :label="$t('password')"
-      prop="password"
-      @keydown.enter.prevent="submit(ruleFormRef)"
-    >
-      <ElInput v-model="form.password" class="input-custom" />
-    </ElFormItem>
-    <ElFormItem>
-      <span @click="$emit('show-auth-form', 'register')">
-        {{ $t('register_redirect') }}
-      </span>
+      <ElFormItem
+        :label="$t('email')"
+        prop="userEmail"
+        :error="invalidEmail ? t('invalid_email') : ''"
+        :validate-status="v$.userEmail.$error ? 'error' : ''"
+        @keydown.enter.prevent="submit(ruleFormRef)"
+      >
+        <ElInput v-model="form.userEmail" class="input-custom" />
+      </ElFormItem>
+      <ElFormItem
+        :label="$t('password')"
+        prop="password"
+        @keydown.enter.prevent="submit(ruleFormRef)"
+      >
+        <ElInput v-model="form.password" type="password" show-password class="input-custom" />
+      </ElFormItem>
       <ElButton @click.prevent="submit(ruleFormRef)" class="btn-custom w-full" type="primary">
         {{ $t('login') }}
       </ElButton>
-    </ElFormItem>
-  </ElForm>
+      <span
+        class="text-white flex justify-center mt-4 cursor-pointer hover:text-slate-200 active:text-slate-300"
+        @click="$emit('show-auth-form', 'register')"
+      >
+        {{ $t('register_redirect') }}
+      </span>
+    </ElForm>
+  </div>
 </template>
 
 
