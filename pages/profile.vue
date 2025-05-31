@@ -117,6 +117,10 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElTabs, ElTabPane } from 'elemen
 import { useAuth } from '~/composables/auth/useAuth'
 import { useRouter } from 'vue-router'
 
+definePageMeta({
+  middleware: 'auth'
+})
+
 const { authUser } = useAuth()
 const { t } = useI18n()
 const router = useRouter()
