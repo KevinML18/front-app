@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-20">
     <el-tabs v-model="tabActive" @tab-change="changeTab" stretch="false" class="">
       <el-tab-pane :label="$t('profile')" name="tab-1">
         <div class="flex flex-col items-center justify-center mt-10">

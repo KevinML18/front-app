@@ -53,7 +53,7 @@
           </el-dropdown>
         </div>
         <!-- Usuario logueado -->
-        <div class="cursor-pointer flex flex-wrap items-center" v-if="authUser">
+        <div class="cursor-pointer flex flex-wrap items-center" v-if="tieneCookie">
           <el-dropdown trigger="click" popper-class="dropdown-custom">
             <img
               :class="authUser.foto ? 'w-11 h-11 rounded-full': 'w-11 bg-cyan-50 rounded-full'"
@@ -89,20 +89,20 @@ import { useRouter } from 'vue-router'
 import { Search } from 'lucide-vue-next'
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus';
 import { useAuth } from '~/composables/auth/useAuth'
+import { useCookie } from '#app'
 
-const { authUser } = useAuth()
-const { t } = useI18n()
-
-const { locales, setLocale, locale } = useI18n()
+const { authUser, logout } = useAuth()
+const { locales, setLocale, locale, t } = useI18n()
 const router = useRouter()
-const { logout } = useAuth()
 
 const producto = ref('')
 const idiomaActual = ref(locale.value)
 const inputBusqueda = ref(null)
-
 const navbarStyle = ref({ opacity: 1 })
 const lastScroll = ref(0)
+const userCookie = useCookie('auth_user')
+
+const tieneCookie = computed(() => !!userCookie.value)
 
 const handleScroll = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop
@@ -126,8 +126,8 @@ const buscar = (event) => {
 
 const getFlag = (code) => {
   return code === 'es'
-      ? '/flags/spain.svg'
-      : '/flags/united kingdom.svg'
+    ? '/flags/spain.svg'
+    : '/flags/united kingdom.svg'
 }
 
 const changeLanguage = (code) => {
@@ -155,6 +155,6 @@ const logoutUser = () => {
 
 <style scoped>
 .fixed {
-    transition: opacity 0.3s ease-out;
+  transition: opacity 0.3s ease-out;
 }
 </style>
