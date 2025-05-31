@@ -86,7 +86,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import { LogOut, Search } from 'lucide-vue-next';
+import { Search } from 'lucide-vue-next'
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus';
 import { useAuth } from '~/composables/auth/useAuth'
 

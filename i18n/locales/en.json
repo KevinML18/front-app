@@ -62,5 +62,10 @@
   "delete_favourite": "Delete favourite",
   "product_deleted_from_favourites": "Favourite deleted",
   "access": "Access",
-  "updated_user": "Updated user"
+  "updated_user": "Updated user",
+  "footer_header": "Find the best price in seconds!",
+  "footer_description": "Our app compares products across different stores so you can shop faster, easier, and at the best price. Save time and money with just one search.",
+  "footer_rights": "BuyPilot. All rights reserved.",
+  "we_have_some_problems": "We had a problem loading the information",
+  "try_again_soon": "Please try again in a few moments"
 }

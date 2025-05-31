@@ -17,7 +17,27 @@
     <h1 class="text-2xl font-bold mb-2 ml-7">
       {{ $t('popular_search') }}
     </h1>
-    <div class="p-5 flex gap-10 flex-wrap justify-center">
+    <div
+      v-if="!popularProducts"
+      class="absolute inset-0 bg-slate-950/10 flex flex-col items-center justify-center z-10"
+    >
+      <DotLottieVue
+        src="/animations/empty.lottie"
+        autoplay
+        loop
+        class="w-40 h-40"
+      />
+      <h2 class="text-lg md:text-xl text-white font-semibold">
+        {{ $t('we_have_some_problems') }}
+      </h2>
+      <p class="text-sm md:text-base text-gray-300 mt-2 max-w-md">
+        {{ $t('try_again_soon') }}
+      </p>
+    </div>
+    <div
+      v-else
+      class="p-5 flex gap-10 flex-wrap justify-center"
+    >
       <ProductCardPreview
         v-for="item in popularProducts"
         :key="item.url"

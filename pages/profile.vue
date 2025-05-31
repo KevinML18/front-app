@@ -90,6 +90,7 @@
             :shop="item.tienda"
             :image="item.imagen_url"
             class="item w-[700px] md:w-[900px]"
+            @delete-favourite="url => favourites = favourites.filter(p => p.url !== url)"
           />
         </div>
       </el-tab-pane>
@@ -143,6 +144,11 @@ const rules = reactive({
 })
 
 onMounted(() => {
+  const savedTab = localStorage.getItem('activeTab')
+  if (savedTab) {
+    tabActive.value = savedTab
+    localStorage.removeItem('activeTab')
+  }
   getFavoritos()
 })
 

@@ -50,12 +50,15 @@
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { useAuth } from '~/composables/auth/useAuth'
 import { eventBus } from '@/utils/eventBus'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+
 
 const { authUser } = useAuth()
 const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
 
+const emit = defineEmits(['delete-favourite'])
 const props = defineProps({
     name: {
         type: String
@@ -117,6 +120,7 @@ const deleteFavourite = async () => {
     $showError(data.msg)
   } else {
     favourite.value = false
+    emit('delete-favourite', props.url)
     $showSuccess(t('product_deleted_from_favourites'))
   }
   loading.value = false
