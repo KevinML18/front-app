@@ -75,7 +75,7 @@
         <!-- Usuario no logueado -->
         <div v-else>
           <ElButton @click="$emit('show-auth-form')" class="btn-custom">
-            {{ $t('access_point') }}
+            {{ $t('access') }}
           </ElButton>
         </div>
       </div>
