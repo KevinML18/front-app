@@ -162,20 +162,26 @@ const submit = async (formEl) => {
 const register = async () => {
   const url = `${getApiUrl()}/crear_usuario/?nombre_usuario=${encodeURIComponent(form.username)}&nombre=${encodeURIComponent(form.name)}&apellidos=${encodeURIComponent(form.lastname)}&email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}&foto=null`
 
-  const response = await fetch(url, {
-    method: 'POST'
-  })
+  try {
+    const response = await fetch(url, {
+      method: 'POST'
+    })
 
-  const data = await response.json()
+    const data = await response.json()
 
-  if ("error" in data) {
-    data.msg === "Error al conectarse a la base de datos: 2003 (HY000): Can't connect to MySQL server on '52.1.39.126:3307' (10060)"
-      ? $showError(t('database_error'))
-      : $showError(data.msg)
-  } else {
-    emit('show-auth-form', 'login')
+    if ("error" in data) {
+      data.msg === "Error al conectarse a la base de datos: 2003 (HY000): Can't connect to MySQL server on '52.1.39.126:3307' (10060)"
+        ? $showError(t('database_error'))
+        : $showError(data.msg)
+    } else {
+      emit('show-auth-form', 'login')
+    }
+  } catch(err) {
+    $showError(t('database_error'))
+  } finally {
+    loading.value = false
   }
-  loading.value = false
+
 }
 
 </script>

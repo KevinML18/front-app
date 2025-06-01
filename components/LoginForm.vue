@@ -118,20 +118,25 @@ const submit = async (formEl) => {
 const loginUser = async () => {
   const url = `${getApiUrl()}/loguear_ususario/?email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}`
 
-  const response = await fetch(url, { method: 'GET' })
-  const data = await response.json()
+  try {
+    const response = await fetch(url, { method: 'GET' })
+    const data = await response.json()
 
-  if ("error" in data) {
-    data.msg === "Error al conectarse a la base de datos: 2003 (HY000): Can't connect to MySQL server on '52.1.39.126:3307' (10060)"
-      ? $showError(t('database_error'))
-      : $showError(data.msg)
-  } else {
-    login(data.data)
-    $showSuccess(`${t('welcome')} ${data.data.nombre_usuario}`)
-    emit('show-auth-form', 'close')
-    await router.push('/')
+    if ("error" in data) {
+      data.msg === "Error al conectarse a la base de datos: 2003 (HY000): Can't connect to MySQL server on '52.1.39.126:3307' (10060)"
+        ? $showError(t('database_error'))
+        : $showError(data.msg)
+    } else {
+      login(data.data)
+      $showSuccess(`${t('welcome')} ${data.data.nombre_usuario}`)
+      emit('show-auth-form', 'close')
+      await router.push('/')
+    }
+  } catch (err) {
+    $showError(t('database_error'))
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 
 </script>
