@@ -34,7 +34,6 @@
         prop="userEmail"
         type="email"
         :error="invalidEmail ? t('invalid_email') : ''"
-        :validate-status="v$.userEmail.$error ? 'error' : ''"
         @keydown.enter.prevent="submit(ruleFormRef)"
       >
         <ElInput v-model="form.userEmail" class="input-custom" />
@@ -46,9 +45,16 @@
       >
         <ElInput v-model="form.password" type="password" show-password class="input-custom" />
       </ElFormItem>
-      <ElButton @click.prevent="submit(ruleFormRef)" class="btn-custom w-full" type="primary">
-        {{ $t('register') }}
-      </ElButton>
+      <button @click.prevent="submit(ruleFormRef)" class="btn-custom w-full" type="primary">
+        <DotLottieVue
+          v-if="loading"
+          src="animations/loading2.lottie"
+          autoplay
+          loop
+          class="w-27 h-6"
+        />
+        <span v-else>{{ $t('register') }}</span>
+      </button>
     </ElForm>
     <span
       class="text-white flex justify-center mt-4 cursor-pointer hover:text-slate-200 active:text-slate-300"
@@ -65,11 +71,12 @@ import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, } from '@vuelidate/validators'
 import { $showError } from '@/utils/notifications'
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
 const { t } = useI18n()
-const invalidEmail = ref(false)
 const emit = defineEmits(['show-auth-form'])
-
+const invalidEmail = ref(false)
+const loading = ref(false)
 // Datos form
 const form = reactive({
   name: '',
@@ -116,9 +123,7 @@ const inputRules = reactive({
       required: true,
       message: t('email_is_required'),
       trigger: ['blur', 'change']
-    }
-  ],
-  userEmail: [
+    },
     {
       type: 'email',
       message: t('invalid_email'),
@@ -137,23 +142,19 @@ const inputRules = reactive({
 const v$ = useVuelidate(rules, form)
 
 const submit = async (formEl) => {
-  if(invalidEmail.value) {
-    invalidEmail.value = false
-  }
-  v$.value.$touch()
+  loading.value = true
   await formEl.validate((valid, fields) => {
-    if (fields && Object.values(fields)?.length) {
-      for (const field of Object.values(fields)) {
-        if (field[0]?.message) {
-          $showError(field[0].message)
-          return false
-        }
+    if (!valid) {
+      const firstErrorField = Object.values(fields)?.find(field => field[0]?.message)
+      if (firstErrorField) {
+        $showError(firstErrorField[0].message)
       }
+      loading.value = false
+      return
     }
-  })
-  if (!v$.value.$invalid) {
+
     register()
-  }
+  })
 }
 
 
@@ -168,10 +169,13 @@ const register = async () => {
   const data = await response.json()
 
   if ("error" in data) {
-    $showError(data.msg)
+    data.msg === "Error al conectarse a la base de datos: 2003 (HY000): Can't connect to MySQL server on '52.1.39.126:3307' (10060)"
+      ? $showError(t('database_error'))
+      : $showError(data.msg)
   } else {
     emit('show-auth-form', 'login')
   }
+  loading.value = false
 }
 
 </script>

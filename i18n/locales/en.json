@@ -68,5 +68,6 @@
   "footer_rights": "BuyPilot. All rights reserved.",
   "we_have_some_problems": "We had a problem loading the information",
   "try_again_soon": "Please try again in a few moments",
-  "see_you_soon": "See you soon"
+  "see_you_soon": "See you soon",
+  "database_error": "We're having connection issues"
 }

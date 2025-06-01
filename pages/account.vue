@@ -199,8 +199,6 @@ const updateUser = async() => {
     $showSuccess('updated_profile')
   }
 }
-
-
 </script>
 
 <style scoped>

@@ -62,7 +62,7 @@
             >
             <template #dropdown>
               <el-dropdown-menu>
-                <nuxt-link to="profile">
+                <nuxt-link to="account">
                   <el-dropdown-item>
                     {{ $t('profile') }}
                   </el-dropdown-item>

@@ -24,7 +24,6 @@
       <DotLottieVue
         src="/animations/empty.lottie"
         autoplay
-        loop
         class="w-40 h-40"
       />
       <h2 class="text-lg md:text-xl text-white font-semibold">
@@ -78,13 +77,12 @@ export default defineComponent({
         const response = await fetch(url, { method: 'GET' })
         const json = await response.json()
         if ("error" in json) {
-          $showError(json.msg)
+          $showError(this.$t('database_error'))
         } else {
           this.popularProducts = json
         }
-      } catch {
-
-      } finally {
+      } catch {}
+      finally {
         this.loading = false
       }
     }

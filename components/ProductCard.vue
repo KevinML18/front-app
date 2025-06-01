@@ -15,7 +15,7 @@
     </div>
     <div class="flex flex-col gap-3">
       <button
-        v-if="favourite || route.name === 'profile'"
+        v-if="favourite || route.name === 'account'"
         class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium px-4 py-2 rounded-lg cursor-pointer"
         @click="deleteFavourite"
       >
