@@ -221,7 +221,7 @@ const uploadToCloudinary = async ({ file, onSuccess, onError }) => {
       '/upload/ar_1:1,c_fill,g_auto/'
     )
     imageUrl.value = transformedUrl
-    console.log('Imagen subida en:', imageUrl.value)
+    // console.log('Imagen subida en:', imageUrl.value)
     onSuccess(data)
     authUser.value = {
       ...authUser.value,
@@ -229,7 +229,6 @@ const uploadToCloudinary = async ({ file, onSuccess, onError }) => {
     }
     router.go(0)
   } catch (err) {
-    console.error(err)
     $showError(t('upload_image_error'))
     onError(err)
   }
