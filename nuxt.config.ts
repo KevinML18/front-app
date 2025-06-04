@@ -9,6 +9,7 @@ export default defineNuxtConfig({
         '@nuxt/image',
         '@nuxt/ui',
         '@nuxtjs/i18n',
+        '@nuxtjs/cloudinary'
     ],
     css: [
         '~/assets/css/main.css',
@@ -29,7 +30,9 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            apiUrl: process.env.API_URL
+            apiUrl: process.env.API_URL,
+            cloudName: process.env.CLOUDINARY_NAME,
+            uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         }
     }
 })

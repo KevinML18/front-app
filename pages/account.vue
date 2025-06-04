@@ -2,25 +2,41 @@
   <div class="mb-20">
     <el-tabs v-model="tabActive" @tab-change="changeTab" stretch="false" class="">
       <el-tab-pane :label="$t('profile')" name="tab-1">
-        <div class="flex flex-col items-center justify-center mt-10">
-          <img :src="authUser.foto ? authUser.foto : '/default_pic.png'" alt="profilePic" :class="authUser.foto ? 'w-25 h-25 rounded-full mx-auto': 'w-25 h-25 bg-cyan-50 rounded-full'">
-          <span class="text-2xl text-emerald-500 mt-2">{{ authUser.nombre_usuario }}</span>
-          <div class="flex flex-row">
-            <button
-              @click="updloadPhoto"
-              class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 cursor-pointer rounded-md p-0.5 ml-2 mt-5"
+        <div class="flex flex-col items-center justify-center mt-10 mb-5">
+          <div
+            v-if="authUser.foto"
+            class="relative w-30 h-30 mx-auto group"
+          >
+            <img
+              :src="authUser.foto"
+              alt="profilePic"
+              class="w-full h-full rounded-full object-cover transition duration-300 group-hover:brightness-50"
             >
-              {{ $t('change') }}
-            </button>
-            <button
-              @click="updateUser"
-              class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 cursor-pointer rounded-md p-0.5 ml-2 mt-5"
+            <div
+              class="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition duration-300"
             >
-              {{ $t('delete') }}
-            </button>
+              <Pencil @click="editPhoto" class="cursor-pointer hover:text-emerald-500" />
+              <Trash2 @click.stop="deletePhoto" class="cursor-pointer hover:text-rose-500" />
+            </div>
           </div>
+          <el-upload
+            ref="uploadRef"
+            v-show="false"
+            :http-request="uploadToCloudinary"
+            :show-file-list="false"
+            :before-upload="beforePhotoUpload"
+          />
+          <div
+            v-if="!authUser.foto"
+            class="w-25 h-25 border rounded-full border-dashed border-white active:border-emerald-700 m-4 flex items-center justify-center group hover:border-emerald-600 cursor-pointer"
+            @click="editPhoto"
+          >
+            <Plus class="w-auto h-15 text-white group-hover:text-emerald-600 active:text-emerald-700" />
+          </div>
+          <span class="text-2xl text-emerald-500 mt-2">{{ authUser.nombre_usuario }}</span>
         </div>
-        <div class="flex items-center justify-center">
+
+        <div class="flex items-center justify-center pb-2">
           <ElForm
             class="custom-form"
             require-asterisk-position="right"
@@ -94,26 +110,13 @@
           />
         </div>
       </el-tab-pane>
-
-      <!-- <el-tab-pane :label="$t('following')" name="tab-3">
-        <div class="w-full p-4 flex flex-col items-center gap-5">
-          <UserCard
-            v-for="user in followers" 
-            :key="user.username"
-            :user="user"
-            class="item w-[600px] md:w-[700px]"
-          />
-        </div>
-      </el-tab-pane> -->
-      <!-- <el-tab-pane :label="$t('posts')" name="tab-4">
-        
-      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
 
 <script setup>
-import { ElForm, ElFormItem, ElInput, ElButton, ElTabs, ElTabPane } from 'element-plus'
+import { ElForm, ElFormItem, ElInput, ElTabs, ElTabPane, ElUpload } from 'element-plus'
+import { Plus, Pencil, Trash2 } from 'lucide-vue-next';
 import { useAuth } from '~/composables/auth/useAuth'
 import { useRouter } from 'vue-router'
 
@@ -128,6 +131,8 @@ const router = useRouter()
 const tabActive = ref('tab-1')
 const favourites = ref([])
 const ruleFormRef = ref()
+const imageUrl = ref('')
+const uploadRef = ref(null)
 
 const form = reactive({
   name: '',
@@ -197,6 +202,64 @@ const updateUser = async() => {
     }
     router.go(0)
     $showSuccess('updated_profile')
+  }
+}
+
+const uploadToCloudinary = async ({ file, onSuccess, onError }) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('upload_preset', getCloudinaryPreset())
+
+  try {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${getCloudinaryName()}/image/upload`, {
+      method: 'POST',
+      body: formData,
+    })
+    const data = await response.json()
+    const transformedUrl = data.secure_url.replace(
+      '/upload/',
+      '/upload/ar_1:1,c_fill,g_auto/'
+    )
+    imageUrl.value = transformedUrl
+    console.log('Imagen subida en:', imageUrl.value)
+    onSuccess(data)
+    authUser.value = {
+      ...authUser.value,
+      foto: imageUrl.value
+    }
+    router.go(0)
+  } catch (err) {
+    console.error(err)
+    $showError(t('upload_image_error'))
+    onError(err)
+  }
+}
+
+const beforePhotoUpload = (rawFile) => {
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp']
+  const isValidType = validTypes.includes(rawFile.type)
+  const isvalidSize = rawFile.size / 1024 / 1024 < 5
+
+  if (!isValidType) {
+    $showError(t('image_format_invalid'))
+    return false
+  }
+  if (!isvalidSize) {
+    $showError(t('image_size_error'))
+    return false
+  }
+  return true
+}
+
+const deletePhoto = async() => {
+  authUser.value.foto = null
+  router.go(0)
+}
+
+const editPhoto = () => {
+  const inputEl = uploadRef.value?.$el?.querySelector('input[type="file"]')
+  if (inputEl) {
+    inputEl.click()
   }
 }
 </script>

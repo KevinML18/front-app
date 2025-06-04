@@ -69,5 +69,8 @@
     "we_have_some_problems": "Tuvimos un problema al cargar la información",
     "try_again_soon": "Intenta de nuevo en unos momentos",
     "see_you_soon": "Hasta pronto",
-    "database_error": "Estamos teniendo problemas de conexión"
+    "database_error": "Estamos teniendo problemas de conexión",
+    "upload_image_error": "No hemos podido subir la imagen",
+    "image_format_invalid": "El formato de la imagen no es válido",
+    "image_size_error": "La imagen no puede sobrepasar los 5MB"
 }

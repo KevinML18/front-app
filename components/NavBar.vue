@@ -147,7 +147,6 @@ onBeforeUnmount(() => {
 
 const logoutUser = () => {
   logout()
-  $showSuccess(t('see_you_soon'))
   router.push('/')
 }
 </script>
