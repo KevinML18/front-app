@@ -72,5 +72,12 @@
     "database_error": "Estamos teniendo problemas de conexión",
     "upload_image_error": "No hemos podido subir la imagen",
     "image_format_invalid": "El formato de la imagen no es válido",
-    "image_size_error": "La imagen no puede sobrepasar los 5MB"
+    "image_size_error": "La imagen no puede sobrepasar los 5MB",
+    "update_password": "Actualizar contraseña",
+    "new_password": "Nueva contraseña",
+    "invalid_password": "Contraseña no válida",
+    "updated_profile": "Perfil actualizado",
+    "nothing_to_change": "No se han realizado cambios",
+    "operation_error": "No podemos procesar tu solicitu en estos momentos",
+    "password_updated": "Contraseña actualizada"
 }

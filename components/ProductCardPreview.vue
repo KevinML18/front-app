@@ -79,7 +79,7 @@ const truncatedTitle = computed(() => {
 const addFavourite = async () => {
   if(authUser.value) {
     loading.value = true
-    const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.product.titulo)}&precio=${encodeURIComponent(props.product.precio)}&imagen_url=${encodeURIComponent(props.product.imagen_url)}&url=${encodeURIComponent(props.product.url)}&id_usuario=${encodeURIComponent(authUser.value.id)}&tienda=${encodeURIComponent(props.product.tienda)}`
+    const urlF = `${getApiUrl()}/api/v1/favoritos/crear?titulo=${encodeURIComponent(props.product.titulo)}&precio=${encodeURIComponent(props.product.precio)}&imagen_url=${encodeURIComponent(props.product.imagen_url)}&url=${encodeURIComponent(props.product.url)}&id_usuario=${encodeURIComponent(authUser.value.id)}&tienda=${encodeURIComponent(props.product.tienda)}`
     
     const response = await fetch(urlF, { method: 'POST' })
 
@@ -99,9 +99,9 @@ const addFavourite = async () => {
 
 const deleteFavourite = async () => {
   loading.value = true
-  const urlF = `${getApiUrl()}/eliminar_favorito/?ide=${encodeURIComponent(authUser.value.id)}&titulo=${encodeURIComponent(props.product.titulo)}`
+  const urlF = `${getApiUrl()}/api/v1/favoritos/usuario/${encodeURIComponent(authUser.value.id)}?titulo=${encodeURIComponent(props.product.titulo)}`
 
-  const response = await fetch(urlF, { method: 'POST' })
+  const response = await fetch(urlF, { method: 'DELETE' })
   const data = await response.json()
 
   if ("error" in data) {

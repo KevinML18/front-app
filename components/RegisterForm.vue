@@ -157,10 +157,8 @@ const submit = async (formEl) => {
   })
 }
 
-
-
 const register = async () => {
-  const url = `${getApiUrl()}/crear_usuario/?nombre_usuario=${encodeURIComponent(form.username)}&nombre=${encodeURIComponent(form.name)}&apellidos=${encodeURIComponent(form.lastname)}&email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}&foto=null`
+  const url = `${getApiUrl()}/api/v1/usuarios/crear?nombre_usuario=${encodeURIComponent(form.username)}&nombre=${encodeURIComponent(form.name)}&apellidos=${encodeURIComponent(form.lastname)}&email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}&foto=null`
 
   try {
     const response = await fetch(url, {

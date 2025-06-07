@@ -72,5 +72,12 @@
   "database_error": "We're having connection issues",
   "upload_image_error": "We couldn't upload the image",
   "image_format_invalid": "The image format is not valid",
-  "image_size_error": "The image must not exceed 5MB"
+  "image_size_error": "The image must not exceed 5MB",
+  "update_password": "Update password",
+  "new_password": "New password",
+  "invalid_password": "Invalid password",
+  "updated_profile": "Updated profile",
+  "nothing_to_change": "Nothing to change",
+  "operation_error": "We can't process your request at this moment",
+  "password_updated": "Password updated"
 }

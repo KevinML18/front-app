@@ -45,12 +45,6 @@
       />
     </div>
   </div>
-  <nuxt-link
-    to="/forum"
-    class="fixed bottom-5 right-5 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg cursor-pointer shadow-lg z-50"  
-  >
-    {{ $t('forum_redirect') }}
-  </nuxt-link>
 </template>
 
 <script>
@@ -73,7 +67,7 @@ export default defineComponent({
     async getPopularProducts() {
       this.loading = true
       try {
-        const url = `${getApiUrl()}/mostrar_portada/`
+        const url = `${getApiUrl()}/api/v1/index/portada`
         const response = await fetch(url, { method: 'GET' })
         const json = await response.json()
         if ("error" in json) {

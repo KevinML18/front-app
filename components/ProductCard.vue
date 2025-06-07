@@ -55,7 +55,6 @@ import { useRoute, useRouter } from 'vue-router'
 
 const { authUser } = useAuth()
 const route = useRoute()
-const router = useRouter()
 const { t } = useI18n()
 
 const emit = defineEmits(['delete-favourite'])
@@ -90,7 +89,7 @@ const truncatedTitle = computed(() => {
 const addFavourite = async () => {
   if(authUser.value) {
     loading.value = true
-    const urlF = `${getApiUrl()}/crear_favorito/?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent(authUser.value.id)}&tienda=${encodeURIComponent(props.shop)}`
+    const urlF = `${getApiUrl()}/api/v1/favoritos/crear?titulo=${encodeURIComponent(props.name)}&precio=${encodeURIComponent(props.price)}&imagen_url=${encodeURIComponent(props.image)}&url=${encodeURIComponent(props.url)}&id_usuario=${encodeURIComponent(authUser.value.id)}&tienda=${encodeURIComponent(props.shop)}`
 
     const response = await fetch(urlF, { method: 'POST' })
 
@@ -104,16 +103,15 @@ const addFavourite = async () => {
     }
     loading.value = false
   } else {
-    console.log('NO esta logueado')
     eventBus.emit('show-auth-form', 'login')
   }
 }
 
 const deleteFavourite = async () => {
   loading.value = true
-  const urlF = `${getApiUrl()}/eliminar_favorito/?ide=${encodeURIComponent(authUser.value.id)}&titulo=${encodeURIComponent(props.name)}`
+  const urlF = `${getApiUrl()}/api/v1/favoritos/usuario/${encodeURIComponent(authUser.value.id)}?titulo=${encodeURIComponent(props.name)}`
 
-  const response = await fetch(urlF, { method: 'POST' })
+  const response = await fetch(urlF, { method: 'DELETE' })
   const data = await response.json()
 
   if ("error" in data) {

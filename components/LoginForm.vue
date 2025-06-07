@@ -45,9 +45,9 @@
 
 
 <script setup>
-import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus'
+import { ElForm, ElFormItem, ElInput } from 'element-plus'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, } from '@vuelidate/validators'
+import { required } from '@vuelidate/validators'
 import { $showError } from '@/utils/notifications'
 import { useRouter } from 'vue-router'
 import { useAuth } from '~/composables/auth/useAuth'
@@ -59,7 +59,6 @@ const { t } = useI18n()
 const router = useRouter()
 const emit = defineEmits(['show-auth-form'])
 
-const invalidEmail = ref(false)
 const loading = ref(false)
 
 // Datos form
@@ -97,8 +96,6 @@ const inputRules = reactive({
   ],
 })
 
-const v$ = useVuelidate(rules, form)
-
 const submit = async (formEl) => {
   loading.value = true
   await formEl.validate((valid, fields) => {
@@ -116,10 +113,10 @@ const submit = async (formEl) => {
 }
 
 const loginUser = async () => {
-  const url = `${getApiUrl()}/loguear_ususario/?email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}`
+  const url = `${getApiUrl()}/api/v1/auth/login?email=${encodeURIComponent(form.userEmail)}&password=${encodeURIComponent(form.password)}`
 
   try {
-    const response = await fetch(url, { method: 'GET' })
+    const response = await fetch(url, { method: 'POST' })
     const data = await response.json()
 
     if ("error" in data) {

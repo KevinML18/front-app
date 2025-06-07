@@ -35,8 +35,7 @@
           <DotLottieVue
             src="/animations/empty.lottie"
             autoplay
-            loop
-            class="w-40 h-40"
+            class="w-60 h-60"
           />
         </div>
         <ProductCard
@@ -61,6 +60,7 @@ import { useRoute } from 'vue-router';
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
 const router = useRoute()
+const { t } = useI18n()
 
 const busqueda = ref('')
 const productosFiltrados = ref(null)
@@ -98,14 +98,31 @@ const actualizarFiltros = ({ orderBy, tienda, rango }) => {
 
 // Método para borrar filtros
 const quitarFiltros = () => {
-    productosFiltrados.value = null
+  productosFiltrados.value = null
+}
+
+const fetchAllProducts = async(producto) => {
+  loading.value = true
+  const url = `${getApiUrl()}/api/v1/productos/todos/${encodeURIComponent(producto)}`
+
+  try {
+    const response = await fetch(url, { method: 'GET' })
+    if (!response.ok)  {
+      $showError(t('database_error'))
+    }
+
+    const data = await response.json()
+    productosOriginales.value = data
+  } catch (err) {
+    console.error("Error al obtener los datos:", err)
+  }
 }
 
 // Fetch para productos desde la API
 const fetchProductosAmazon = async (producto) => {
   loading.value = true
   try {
-    const response = await fetch(`http://127.0.0.1:8000/get_productos_amazon/${encodeURIComponent(producto)}`);
+    const response = await fetch(`${getApiUrl()}/api/v1/productos/amazon/${encodeURIComponent(producto)}`);
     if (!response.ok)  {
       throw new Error(`Error HTTP: ${response.status}`)
     }
@@ -114,26 +131,26 @@ const fetchProductosAmazon = async (producto) => {
     productosOriginales.value = data
     return data
   } catch (error) {
-      console.error("Error al obtener los datos:", error)
+    $showError(t('operation_error'))
   } finally {
-      await fetchProductosMedia(producto)
-    }
+    loading.value = false
+  }
 }
 
 const fetchProductosMedia = async (producto) => {
-    try {
-        const response = await fetch(`http://127.0.0.1:8000/get_productos_mediamarkt/${encodeURIComponent(producto)}`);
-        if (!response.ok)  {
-            throw new Error(`Error HTTP: ${response.status}`)
-        }
-        const data = await response.json()
-        productosOriginales.value.push(...data) 
-        return data
-    } catch (error) {
-        console.error("Error al obtener los datos:", error)
-    } finally {
-        loading.value = false
+  try {
+    const response = await fetch(`${getApiUrl()}/api/v1/productos/mediamarkt/${encodeURIComponent(producto)}`);
+    if (!response.ok)  {
+      throw new Error(`Error HTTP: ${response.status}`)
     }
+    const data = await response.json()
+    productosOriginales.value.push(...data) 
+    return data
+  } catch (error) {
+    $showError(t('operation_error'))
+  } finally {
+    loading.value = false 
+  }
 }
    
 
@@ -141,16 +158,18 @@ const fetchProductosMedia = async (producto) => {
 // Ejecuta cuando el componente monta
 onMounted(async () => {
     busqueda.value = router.query.producto || '';
-    productosOriginales.value = await fetchProductosAmazon(busqueda.value);
+    productosOriginales.value = await fetchProductosAmazon(busqueda.value)
+    // productosOriginales.value = await fetchAllProducts(busqueda.value)
 })
 
 // Observa cambios en la búsqueda
 watchEffect(async () => {
-    if (router.query.producto) {
-        busqueda.value = router.query.producto;
-        productosOriginales.value = await fetchProductosAmazon(busqueda.value);
-    }
-});
+  if (router.query.producto) {
+    busqueda.value = router.query.producto;
+    productosOriginales.value = await fetchProductosAmazon(busqueda.value)
+    // productosOriginales.value = await fetchAllProducts(busqueda.value)
+  }
+})
 </script>
 
 <style scoped>
