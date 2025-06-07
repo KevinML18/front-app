@@ -21,7 +21,7 @@ jobs:
 
     - name: Deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/key.pem ec2-user@52.1.39.126 << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/key.pem ec2-user@34.192.10.0 << 'EOF'
           cd front-app
           git pull origin master
           sudo docker stop front || true
