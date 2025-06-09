@@ -5,14 +5,20 @@
   >
     <div class="flex flex-row justify-between p-5">
       <!-- Logo BuyPilot -->
-      <nuxt-link to="/"> <img src="/logo.png" class="w-10 h-auto" /></nuxt-link>
+      <nuxt-link to="/">
+        <img
+          src="/logo.png"
+          class="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem]"
+          alt="BuyPilot Logo"
+        />  
+      </nuxt-link>
       <!-- Buscador -->
       <div class="flex items-center gap-2">
         <input
           ref="inputBusqueda"
           type="text"
           v-model="producto"
-          class="bg-gray-900 p-2 rounded-xl text-white md:w-150"
+          class="bg-gray-900 p-2 rounded-xl text-white md:w-120"
           :placeholder="$t('search_message')"
           @keyup.enter="buscar"
         />
@@ -36,7 +42,7 @@
               <img
                 :src="getFlag(idiomaActual)"
                 :alt="idiomaActual"
-                class="w-10 h-auto hidden md:block"
+                class="hidden md:inline-block w-10 min-w-[2.5rem] h-auto"
               />
             </div>
             <template #dropdown>
@@ -56,10 +62,10 @@
         <div class="cursor-pointer flex flex-wrap items-center" v-if="tieneCookie">
           <el-dropdown trigger="click" popper-class="dropdown-custom">
             <img
-              :class="authUser.foto ? 'w-11 h-11 rounded-full': 'w-11 bg-cyan-50 rounded-full'"
-              :src="authUser.foto ? authUser.foto : '/default_pic.png'"
+              :class="authUser.foto !== 'null' ? 'w-11 h-11 min-w-[2.75rem] min-h-[2.75rem] rounded-full' : 'w-11 h-11 min-w-[2.75rem] min-h-[2.75rem] bg-cyan-50 rounded-full'"
+              :src="authUser.foto !== 'null' ? authUser.foto : '/default_pic.png'"
               alt="profile picture"
-            >
+            />
             <template #dropdown>
               <el-dropdown-menu>
                 <nuxt-link to="account">

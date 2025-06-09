@@ -5,15 +5,14 @@
       class="relative w-30 h-30 mx-auto group"
     >
       <img
-        :src="authUser.foto"
+        :src="authUser.foto !== 'null' ? authUser.foto : '/default_pic.png'"
         alt="profilePic"
-        class="w-full h-full rounded-full object-cover transition duration-300 group-hover:brightness-50"
+        :class="authUser.foto !== 'null' ? 'w-full h-full rounded-full object-cover transition duration-300 group-hover:brightness-50' : 'bg-cyan-50 rounded-full object-cover transition duration-300 group-hover:brightness-50'"
       >
       <div
         class="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition duration-300"
       >
         <Pencil @click="editPhoto" class="cursor-pointer hover:text-emerald-500" />
-        <Trash2 @click.stop="deletePhoto" class="cursor-pointer hover:text-rose-500" />
       </div>
     </div>
     <el-upload

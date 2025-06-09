@@ -1,11 +1,17 @@
 <template>
   <div class="flex items-center bg-gray-900 rounded-xl p-5 shadow-sm space-x-4">
-    <img :src="image" alt="Producto" class="md:w-30 md:h-auto w-15 h-auto rounded-sm" />
+    <div class="w-20 h-20 md:w-40 md:h-40 flex items-center justify-center overflow-hidden">
+      <img
+        :src="image"
+        alt="Producto"
+        class="object-contain w-full h-full"
+      />
+    </div>
     <div class="flex-1">
       <a
         :href="url" 
         :title="name"
-        class="md:text-xl font-semibold text-emerald-400 hover:text-emerald-600 active:text-emerald-700"
+        class="md:text-xl text-sm font-semibold text-emerald-400 hover:text-emerald-600 active:text-emerald-700"
         target="_blank"
       >
         {{ truncatedTitle }}
@@ -26,11 +32,11 @@
           loop
           class="w-27 h-6"
         />
-        <span v-else>{{ $t('delete_favourite') }}</span>
+        <span v-else class="text-sm">{{ $t('delete_favourite') }}</span>
       </button>
       <button
         v-else
-        class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg cursor-pointer"
+        class="text-xs sm:text-base bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg cursor-pointer"
         @click="addFavourite"
       >
         <DotLottieVue
@@ -60,19 +66,19 @@ const { t } = useI18n()
 const emit = defineEmits(['delete-favourite'])
 const props = defineProps({
     name: {
-        type: String
+      type: String
     },
     price: {
-        type: Number
+      type: Number
     },
     url: {
-        type: String
+      type: String
     },
     shop: {
-        type: String
+      type: String
     },
     image: {
-        type: String
+      type: String
     }
 })
 

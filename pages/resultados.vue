@@ -16,7 +16,7 @@
   <div v-else>
     <div class="flex flex-col md:flex-row min-h-screen">
       <!-- Filtros -->
-      <div class="w-full md:w-1/7 p-4 flex flex-col">
+      <div class="w-full md:w-auto md:max-w-xs p-4 flex flex-col">
         <ProductFilters
           v-if="productosOriginales && productosOriginales.length>= 0"
           :productos="productosOriginales"
@@ -24,7 +24,7 @@
           @quitar-filtros="quitarFiltros"
         />
       </div>
-      <div class="w-full md:w-6/7 p-4 flex flex-col gap-5">
+      <div class="w-full md:w-4/5 p-4 flex flex-col gap-5">
         <h1 class="text-2xl font-bold mb-2">
           {{ $t('results_for') }}: "{{ busqueda }}"
         </h1>
@@ -101,22 +101,25 @@ const quitarFiltros = () => {
   productosFiltrados.value = null
 }
 
-const fetchAllProducts = async(producto) => {
-  loading.value = true
-  const url = `${getApiUrl()}/api/v1/productos/todos/${encodeURIComponent(producto)}`
+// const fetchAllProducts = async(producto) => {
+//   loading.value = true
+//   const url = `${getApiUrl()}/api/v1/productos/todos/${encodeURIComponent(producto)}`
 
-  try {
-    const response = await fetch(url, { method: 'GET' })
-    if (!response.ok)  {
-      $showError(t('database_error'))
-    }
+//   try {
+//     const response = await fetch(url, { method: 'GET' })
+//     if (!response.ok)  {
+//       $showError(t('database_error'))
+//     }
 
-    const data = await response.json()
-    productosOriginales.value = data
-  } catch (err) {
-    console.error("Error al obtener los datos:", err)
-  }
-}
+//     const data = await response.json()
+//     productosOriginales.value = data
+//   } catch (err) {
+//     $showError(t('operation_error'))
+//   } finally {
+//     loading.value = false
+//   }
+// }
+
 
 // Fetch para productos desde la API
 const fetchProductosAmazon = async (producto) => {
@@ -137,21 +140,21 @@ const fetchProductosAmazon = async (producto) => {
   }
 }
 
-const fetchProductosMedia = async (producto) => {
-  try {
-    const response = await fetch(`${getApiUrl()}/api/v1/productos/mediamarkt/${encodeURIComponent(producto)}`);
-    if (!response.ok)  {
-      throw new Error(`Error HTTP: ${response.status}`)
-    }
-    const data = await response.json()
-    productosOriginales.value.push(...data) 
-    return data
-  } catch (error) {
-    $showError(t('operation_error'))
-  } finally {
-    loading.value = false 
-  }
-}
+// const fetchProductosMedia = async (producto) => {
+//   try {
+//     const response = await fetch(`${getApiUrl()}/api/v1/productos/mediamarkt/${encodeURIComponent(producto)}`);
+//     if (!response.ok)  {
+//       throw new Error(`Error HTTP: ${response.status}`)
+//     }
+//     const data = await response.json()
+//     productosOriginales.value.push(...data) 
+//     return data
+//   } catch (error) {
+//     $showError(t('operation_error'))
+//   } finally {
+//     loading.value = false 
+//   }
+// }
    
 
 

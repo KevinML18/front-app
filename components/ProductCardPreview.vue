@@ -18,7 +18,7 @@
       <p class="text-lg mt-1">{{ product.precio }}€</p>
     </div>
     <button
-      v-if="favourite"
+      v-if="favourite || (authUser && product.usuario === authUser.id)"
       @click="deleteFavourite"
       class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-medium p-1 rounded-lg cursor-pointer flex items-center justify-center"
     >
