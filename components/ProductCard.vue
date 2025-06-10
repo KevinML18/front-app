@@ -2,7 +2,7 @@
   <div class="flex items-center bg-gray-900 rounded-xl p-5 shadow-sm space-x-4">
     <div class="w-20 h-20 md:w-40 md:h-40 flex items-center justify-center overflow-hidden">
       <img
-        :src="image"
+        :src="shop !== 'Fnac' ? image : 'https://1000marcas.net/wp-content/uploads/2021/06/Fnac-Logo-1985.jpg'"
         alt="Producto"
         class="object-contain w-full h-full"
       />

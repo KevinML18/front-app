@@ -43,7 +43,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ElForm, ElFormItem, ElInput } from 'element-plus'
 import { useVuelidate } from '@vuelidate/core'
