@@ -7,3 +7,4 @@ const { authUser } = useAuth()
     return navigateTo('/')
   }
 })
+
