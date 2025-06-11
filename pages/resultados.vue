@@ -165,13 +165,13 @@ onMounted(async () => {
 })
 
 // Observa cambios en la búsqueda
-// watchEffect(async () => {
-//   if (router.query.producto) {
-//     busqueda.value = router.query.producto;
-//     productosOriginales.value = await fetchProductosAmazon(busqueda.value)
-//     // productosOriginales.value = await fetchAllProducts(busqueda.value)
-//   }
-// })
+watchEffect(async () => {
+  if (router.query.producto) {
+    busqueda.value = router.query.producto;
+    productosOriginales.value = await fetchProductosAmazon(busqueda.value)
+    // productosOriginales.value = await fetchAllProducts(busqueda.value)
+  }
+})
 </script>
 
 <style scoped>
